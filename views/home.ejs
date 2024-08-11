@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>commUnity</title>
     <link rel="stylesheet" href="css/home.css" />
   </head>
   <body>
@@ -28,6 +28,36 @@
             >together.</span
           >
         </h1>
+        <button class="button" id="getStartedButton">Get Started</button>
+      </div>
+    </div>
+    <div class="second-section">
+      <div style="display: flex">
+        <div class="second-section-inner-container">
+          <h1>
+            Connect. Collaborate. Thrive. <br /><span style="color: #00adb5"
+              >Your Local Hub.</span
+            >
+          </h1>
+        </div>
+        <p class="second-section-p">
+          Feeling disconnected from your neighbors? Want a voice in shaping your
+          local area? Our platform is your one-stop shop for all things local.
+          Connect with residents, collaborate on solutions, and stay informed
+          about everything happening in your community. From local events and
+          news to discussions on important issues, we empower you to thrive in a
+          connected and engaged community. Let's build a stronger community
+          together!
+        </p>
+      </div>
+      <div class="second-section-icons">
+        <div class="second-section-icon-container">
+          <img
+            src="images/calendar-today.svg"
+            alt="events"
+            class="second-section-icon"
+          />
+        </div>
       </div>
     </div>
   </body>
@@ -35,7 +65,7 @@
     document
       .getElementById("getStartedButton")
       .addEventListener("click", function () {
-        window.location.href = "/signup"; // Redirect to signup page
+        window.location.href = "/signup";
       });
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
