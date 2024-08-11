@@ -151,6 +151,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-bottom: 2%;
 }
 .second-section-p {
   width: 50%;
@@ -159,6 +160,7 @@ body {
   font-style: normal;
   font-size: 1rem;
   padding: 5%;
+  padding-bottom: 2%;
 }
 /* Apply the 5th scrollbar styling to the entire webpage */
 html,
@@ -216,12 +218,117 @@ body::-webkit-scrollbar-thumb:active {
   align-items: center;
   justify-content: center;
 }
+
 .second-section-icon-container {
   background-color: #ecebeb;
-  padding: 1%;
-  border-radius: 50%;
+  padding: 1rem; /* Adjust padding to control the size of the icon within the circle */
+  border-radius: 50%; /* Makes the container a circle */
+  margin: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem; /* Set explicit width */
+  height: 2.5rem; /* Set explicit height */
 }
+
 .second-section-icon {
-  width: 1rem;
-  height: 1rem;
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Styling for the new content */
+.new-content {
+  text-align: center; /* Centering the new content */
+  margin-bottom: 0.5rem; /* Add some space below the new content */
+}
+.second-section-desc {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.third-section {
+  margin-top: 3rem;
+}
+.find-clubs-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.find-clubs-h1 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  text-transform: capitalize;
+  font-size: 2.5rem;
+  margin-bottom: 0;
+}
+.find-clubs-p {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.5rem;
+  text-align: center;
+}
+/* From Uiverse.io by gharsh11032000 */
+.card {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  background: linear-gradient(-45deg, #f89b29 0%, #ff0f7b 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card svg {
+  width: 48px;
+  fill: #333;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card:hover {
+  transform: rotate(-5deg) scale(1.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #fff;
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card:hover .card__content {
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 1;
+}
+
+.card__title {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+  font-weight: 700;
+}
+
+.card__description {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: #777;
+  line-height: 1.4;
+}
+
+.card:hover svg {
+  scale: 0;
+  transform: rotate(-45deg);
 }
