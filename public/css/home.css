@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inconsolata:wght@200..900&family=Kanit&family=Play:wght@400;700&family=Poppins:wght@400;500&family=Protest+Guerrilla&family=Protest+Strike&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Sixtyfour&family=Smooch+Sans:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Dongle&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+body {
+  padding: 0;
+  margin: 0;
+}
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto;
+  height: 10vh;
+  padding: 10px 20px;
+  border-bottom: 2px solid black;
+}
+
+.logo {
+  margin: 0;
+  color: rgb(51, 57, 137);
+  font-size: 1.5rem;
+  font-family: "Play", sans-serif;
+}
+
+.nav-links {
+  list-style-type: none;
+  margin: 0px 20px 0px 20px;
+  padding: 0;
+}
+
+.nav-links li {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.nav-links li:last-child {
+  margin-right: 0;
+}
+
+.nav-links li a {
+  color: rgb(51, 57, 137);
+  font-size: 1.5rem;
+  text-decoration: none;
+  font-weight: bolder;
+  transition: color 0.3s ease;
+  font-family: "Play", sans-serif;
+}
+
+.nav-links li a:hover {
+  color: #ffc107;
+}
+#vanta {
+  height: 87vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.first-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.first-section-logo {
+  height: 100px;
+  width: 550px;
+}
+.first-section-tagline {
+  font-family: "Dongle", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 9vh;
+  margin: 0;
+  color: #393e46;
+}
