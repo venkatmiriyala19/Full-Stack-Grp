@@ -11,5 +11,8 @@
     "nodemin": "^1.0.1",
     "nodemon": "^3.1.4",
     "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.2"
   }
 }
