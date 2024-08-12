@@ -140,6 +140,7 @@ body {
 .second-section {
   display: flex;
   flex-direction: column;
+  margin-bottom: 5%;
 }
 .second-section-inner-container {
   width: 40%;
@@ -270,65 +271,142 @@ body::-webkit-scrollbar-thumb:active {
   font-size: 1.5rem;
   text-align: center;
 }
-/* From Uiverse.io by gharsh11032000 */
-.card {
-  position: relative;
-  width: 300px;
-  height: 200px;
-  background: linear-gradient(-45deg, #f89b29 0%, #ff0f7b 100%);
-  border-radius: 10px;
+.third-section-cards {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  margin-right: 3%;
+}
+/* From Uiverse.io by joe-watson-sbf */
+.flip-card {
+  background-color: transparent;
+  width: 30vw;
+  height: 40vh;
+  perspective: 1000px;
+  font-family: sans-serif;
+
+  margin: 3% 0 3% 3%;
 }
 
-.card svg {
-  width: 48px;
-  fill: #333;
-  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+.title {
+  font-size: 1.5em;
+  font-weight: 900;
+  text-align: center;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 2.5rem;
 }
 
-.card:hover {
-  transform: rotate(-5deg) scale(1.1);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-.card__content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-45deg);
+.flip-card-inner {
+  position: relative;
   width: 100%;
   height: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  background-color: #fff;
-  opacity: 0;
-  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
 }
 
-.card:hover .card__content {
-  transform: translate(-50%, -50%) rotate(0deg);
-  opacity: 1;
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
 }
 
-.card__title {
-  margin: 0;
-  font-size: 24px;
-  color: #333;
-  font-weight: 700;
+.flip-card-front,
+.flip-card-back {
+  box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 1rem;
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
 }
 
-.card__description {
-  margin: 10px 0 0;
-  font-size: 14px;
-  color: #777;
-  line-height: 1.4;
+.flip-card-front {
+  background: url("/images/chess.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: white;
 }
 
-.card:hover svg {
-  scale: 0;
-  transform: rotate(-45deg);
+.flip-card-back {
+  background: url("/images/chess.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: white;
+  transform: rotateY(180deg);
+  position: relative;
+  overflow: hidden; /* Ensure the blur stays within the card bounds */
+}
+
+.flip-card-back::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 110%;
+  height: 110%;
+  background: inherit; /* Inherit the background image */
+  background-size: inherit;
+  background-repeat: inherit;
+  filter: blur(10px); /* Apply blur here */
+  z-index: 1; /* Ensure it is below the text content */
+  border-radius: inherit; /* Match the card's border radius */
+}
+
+.flip-card-back .title,
+.flip-card-back .title-desc {
+  position: relative;
+  z-index: 2; /* Ensure the text stays above the blurred background */
+}
+
+.title-desc {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 0 1.5rem;
+  z-index: 2;
+}
+
+.flip-card-front::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.3
+  ); /* Change this color and opacity as needed */
+  z-index: 1; /* Position this below the title text */
+  border-radius: 1rem; /* Match the border radius of the flip card */
+}
+
+.flip-card-front .title {
+  position: relative;
+  z-index: 2; /* Ensure the title is above the background layer */
+}
+.art-club {
+  background: url("/images/art.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.badminton-club {
+  background: url("/images/badminton.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.fourth-section {
+  height: 70vh;
 }
