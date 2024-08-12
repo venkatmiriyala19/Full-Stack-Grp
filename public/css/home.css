@@ -141,9 +141,11 @@ body {
   display: flex;
   flex-direction: column;
   margin-bottom: 5%;
+  justify-content: center;
+  align-items: center;
 }
 .second-section-inner-container {
-  width: 40%;
+  width: 50%;
   font-family: "Poppins", sans-serif;
   font-weight: 500;
   font-style: normal;
@@ -159,7 +161,7 @@ body {
   font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 1rem;
+  font-size: 1.2rem;
   padding: 5%;
   padding-bottom: 2%;
 }
@@ -221,15 +223,15 @@ body::-webkit-scrollbar-thumb:active {
 }
 
 .second-section-icon-container {
-  background-color: #ecebeb;
+  background-color: #fff;
   padding: 1rem; /* Adjust padding to control the size of the icon within the circle */
   border-radius: 50%; /* Makes the container a circle */
   margin: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 2.5rem; /* Set explicit width */
-  height: 2.5rem; /* Set explicit height */
+  width: 5rem; /* Set explicit width */
+  height: 5rem; /* Set explicit height */
 }
 
 .second-section-icon {
@@ -237,7 +239,6 @@ body::-webkit-scrollbar-thumb:active {
   height: 2rem;
 }
 
-/* Styling for the new content */
 .new-content {
   text-align: center; /* Centering the new content */
   margin-bottom: 0.5rem; /* Add some space below the new content */
@@ -246,6 +247,7 @@ body::-webkit-scrollbar-thumb:active {
   font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-style: normal;
+  font-size: 1.2rem;
 }
 .third-section {
   margin-top: 3rem;
@@ -472,7 +474,8 @@ body::-webkit-scrollbar-thumb:active {
   font-size: 2.5rem; /* Adjust the font size as needed */
 }
 .fifth-section {
-  margin-top: 6vh;
+  margin: 15xvh 0;
+  margin-bottom: 30vh;
 }
 /* From Uiverse.io by Yaya12085 */
 .fifth-section-card {
@@ -557,6 +560,10 @@ body::-webkit-scrollbar-thumb:active {
   border-radius: calc(var(--curve) * 1px);
   overflow: hidden;
   text-decoration: none;
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
 }
 
 .card__image {
@@ -657,7 +664,7 @@ body::-webkit-scrollbar-thumb:active {
 
 body {
   font-family: "Noto Sans JP", sans-serif;
-  background-color: #fef8f8;
+  background-color: #eeeeee;
 }
 .review-stars {
   width: 15px;
