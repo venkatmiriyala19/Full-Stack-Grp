@@ -49,7 +49,7 @@ body {
   color: #ffc107;
 }
 #vanta {
-  height: 87vh;
+  height: 90vh;
   width: 100%;
   display: flex;
   align-items: center;
@@ -249,6 +249,7 @@ body::-webkit-scrollbar-thumb:active {
 }
 .third-section {
   margin-top: 3rem;
+  margin-bottom: 6vh;
 }
 .find-clubs-header {
   display: flex;
@@ -282,7 +283,7 @@ body::-webkit-scrollbar-thumb:active {
   height: 40vh;
   perspective: 1000px;
   font-family: sans-serif;
-
+  cursor: pointer;
   margin: 3% 0 3% 3%;
 }
 
@@ -409,4 +410,256 @@ body::-webkit-scrollbar-thumb:active {
 }
 .fourth-section {
   height: 70vh;
+  display: flex;
+}
+#left-container {
+  width: 40vw;
+  margin-left: 5vw;
+}
+.general-discussions-h1 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  text-transform: capitalize;
+  font-size: 2.5rem;
+  margin-bottom: 0;
+}
+.right-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45vw;
+  margin-left: 5vw;
+}
+.fourth-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh; /* Adjust the height as needed */
+}
+
+#left-container {
+  width: 50%; /* Adjust the width as needed */
+}
+
+.right-container {
+  position: relative;
+  width: 50%; /* Adjust the width as needed */
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.right-container::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -55%;
+  width: 150%;
+  height: 100%;
+  background-color: #00adb5; /* Adjust to your preferred color */
+  border-radius: 50%;
+  transform: translateY(-50%);
+  z-index: -1; /* Ensure it stays behind the text */
+}
+
+.general-discussions-h1 {
+  z-index: 1;
+  text-align: center;
+  color: #000000; /* Text color */
+  font-size: 2.5rem; /* Adjust the font size as needed */
+}
+.fifth-section {
+  margin-top: 6vh;
+}
+/* From Uiverse.io by Yaya12085 */
+.fifth-section-card {
+  background-color: rgba(243, 244, 246, 1);
+  padding: 2rem;
+  max-width: 320px;
+  border-radius: 10px;
+  box-shadow: 0 20px 30px -20px rgba(5, 5, 5, 0.24);
+}
+
+.fifth-section-header {
+  display: flex;
+  align-items: center;
+  grid-gap: 1rem;
+  gap: 1rem;
+}
+
+.fifth-section-header .fifth-section-image {
+  height: 4rem;
+  width: 4rem;
+  border-radius: 9999px;
+  object-fit: cover;
+  background-color: royalblue;
+}
+
+.fifth-section-stars {
+  display: flex;
+  justify-content: center;
+  grid-gap: 0.125rem;
+  gap: 0.125rem;
+  color: rgba(34, 197, 94, 1);
+}
+
+.fifth-section-stars svg {
+  height: 1rem;
+  width: 1rem;
+}
+
+.fifth-section-name {
+  margin-top: 0.25rem;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  --tw-text-opacity: 1;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: rgba(55, 65, 81, 1);
+}
+
+.fifth-section-message {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  margin-top: 1rem;
+  color: rgba(107, 114, 128, 1);
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.reviews-h1 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 2.5rem;
+  margin-bottom: 0;
+  text-align: center;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 4rem 5vw;
+  padding: 0;
+  list-style-type: none;
+}
+
+.card {
+  position: relative;
+  display: block;
+  height: 100%;
+  border-radius: calc(var(--curve) * 1px);
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.card__image {
+  width: 140%;
+  height: auto;
+}
+
+.card__overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  border-radius: calc(var(--curve) * 1px);
+  background-color: var(--surface-color);
+  transform: translateY(100%);
+  transition: 0.2s ease-in-out;
+}
+
+.card:hover .card__overlay {
+  transform: translateY(0);
+}
+
+.card__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2em;
+  padding: 2em;
+  border-radius: calc(var(--curve) * 1px) 0 0 0;
+  background-color: var(--surface-color);
+  transform: translateY(-100%);
+  transition: 0.2s ease-in-out;
+}
+
+.card__arc {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  z-index: 1;
+}
+
+.card__arc path {
+  fill: var(--surface-color);
+  d: path("M 40 80 c 22 0 40 -22 40 -40 v 40 Z");
+}
+
+.card:hover .card__header {
+  transform: translateY(0);
+}
+
+.card__thumb {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.card__title {
+  font-size: 1em;
+  margin: 0 0 0.3em;
+  color: #6a515e;
+}
+
+.card__tagline {
+  display: block;
+  margin: 1em 0;
+  font-family: "MockFlowFont";
+  font-size: 0.8em;
+  color: #d7bdca;
+}
+
+.card__status {
+  font-size: 0.8em;
+  color: #d7bdca;
+}
+
+.card__description {
+  padding: 0 2em 2em;
+  margin: 0;
+  color: #d7bdca;
+  font-family: "MockFlowFont";
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+:root {
+  --surface-color: #fff;
+  --curve: 40;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  background-color: #fef8f8;
+}
+.review-stars {
+  width: 15px;
+  display: flex;
 }
