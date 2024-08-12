@@ -1,0 +1,38 @@
+<%- include("partials/header") -%>
+
+<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+
+<h1>You are posting as <%= user %> </h1>
+
+<form class="" action="/compose" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="blogtitle">Title</label>
+      <input class="form-control" type="text" name="blogtitle" value="" placeholder="Write your Title">
+    </div>
+    <div class="form-group">
+      <label for="postimage">Post Image</label>
+      <input class="form-control" type="file" name="image" accept="image/*">
+    </div>
+    <div class="form-group">
+      <label for="category">Category</label>
+      <input type="text" name="category" list="options">
+      <datalist id="options">
+        <option value="General Discussion">General Discussion</option>
+        <option value="Announcements">Announcements</option>
+        <option value="Government Announcements">Government Announcements</option>
+        <option value="Review">Review</option>
+      </datalist>
+    </div>
+    
+    <div id="editor" class="form-group">
+      <label for="blogpost">Post</label>
+      <textarea class="form-control form-control-lg" rows="5" cols="30" name="blogpost" placeholder="Write your text"></textarea>
+    </div>
+    <script>
+      CKEDITOR.replace("blogpost");
+    </script>
+    <button class="btn btn-primary" type="submit" name="button">Publish</button>
+  </form>
+  
+
+<!-- <%- include("partials/footer") -%> -->

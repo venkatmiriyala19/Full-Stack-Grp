@@ -1,0 +1,67 @@
+/* General container styling */
+.container-post {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+/* Post styling */
+.post {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Title styling */
+.post h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Image styling */
+.post-image {
+  margin-bottom: 10px;
+}
+
+.post-image img {
+  border-radius: 8px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Content styling */
+.post-content {
+  font-size: 1em;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Actions styling */
+.post-actions {
+  margin-top: 10px;
+}
+
+.post-actions a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.post-actions a:hover {
+  text-decoration: underline;
+}
+
+/* No posts message */
+.container p {
+  font-size: 1.2em;
+  color: #666;
+}

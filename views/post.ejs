@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>commUnity</title>
+    <link rel="stylesheet" href="css/post.css" />
+  </head>
+  <body>
+    <%- include("partials/header") -%>
+
+    <h1>All Posts</h1>
+
+    <div class="container-post">
+      <% if (posts.length === 0) { %>
+        <p>No posts available.</p>
+      <% } else { %>
+        <% posts.forEach(post => { %>
+          <div class="post">
+            <h2><%= post.Title %></h2> <!-- Ensure the key matches your Firestore field -->
+            <div class="post-image">
+              <% if (post.Image) { %> <!-- Ensure the key matches your Firestore field -->
+                <img src="<%= post.Image %>" alt="<%= post.Title %> Image" style="max-width: 100%; height: auto;">
+              <% } else { %>
+                <img src="/images/default.jpg" alt="Default Image" style="max-width: 100%; height: auto;">
+              <% } %>
+            </div>
+            <div class="post-content">
+              <%- post.Content %> <!-- Ensure the key matches your Firestore field -->
+            </div>
+            <% if (user && user.uid === post.AuthorId) { %> <!-- Match user ID with AuthorId -->
+              <div class="post-actions">
+                <a href="/edit/<%= post.id %>">Edit</a>
+                <a href="/delete/<%= post.id %>" onclick="return confirm('Are you sure you want to delete this post?');">Delete</a>
+              </div>
+            <% } %>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+
+    <!-- <%- include("partials/footer") -%> -->
+  </body>
+</html>

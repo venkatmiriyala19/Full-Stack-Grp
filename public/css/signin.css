@@ -21,8 +21,8 @@ body {
 }
 .login-box {
   position: relative;
-  width: 400px;
-  height: 380px;
+  width: 30%;
+  height: 65%;
   background-color: #fff;
   border-radius: 15px;
   border: 2px solid rgba(255, 255, 255, 0.5);
