@@ -1,0 +1,149 @@
+/* Importing Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap");
+
+/* Outer Container */
+.compose-outer-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-color: #f9f9f9;
+}
+
+/* Form Container */
+.compose-form-container {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 800px;
+  padding: 3rem;
+  background-color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Header */
+.compose-form-header {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Form Group */
+.compose-form-group {
+  margin-bottom: 1.5rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+.compose-form-group label {
+  font-weight: 500;
+}
+
+/* Form Control */
+.compose-form-control {
+  width: 96%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #f5f5f5;
+  background-color: #f5f5f5;
+}
+.compose-form-control:focus {
+  border-color: #007a7a;
+  outline: none;
+}
+
+/* Image Container */
+.compose-image-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.upload-outer-container {
+  background-color: #f0f8ff;
+  border-radius: 1rem;
+  padding: 0.5rem;
+}
+
+.upload-container {
+  border: 2px dashed #00f;
+  padding: 20px;
+  border-radius: 10px;
+  display: inline-block;
+  text-align: center;
+  background-color: #f0f8ff;
+  position: relative;
+}
+
+.custom-file-upload {
+  display: block;
+  cursor: pointer;
+}
+
+.upload-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 150px;
+  padding: 10px;
+}
+
+#preview {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 5px;
+}
+
+#remove-file {
+  margin-left: 10px;
+  font-size: 20px;
+  color: red;
+}
+
+.file-info {
+  margin-top: 10px;
+  text-align: center;
+}
+
+#file-name {
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* From Uiverse.io by ExampleDoc28986 */
+.compose-form-button {
+  background-color: #ffffff00;
+  color: #000;
+  width: 10em;
+  height: 2.9em;
+  font-size: 1em;
+  border: #3cc 0.2em solid;
+  border-radius: 11px;
+  text-align: right;
+  transition: all 0.6s ease;
+}
+
+.compose-form-button:hover {
+  background-color: #3cc;
+  color: #fff;
+  cursor: pointer;
+}
+
+.compose-form-button svg {
+  width: 1.6em;
+  margin: -0.2em 0.8em 1em;
+  position: absolute;
+  display: flex;
+  transition: all 0.6s ease;
+}
+
+.compose-form-button:hover svg {
+  transform: translateX(5px);
+}
+
+.button-text {
+  margin: 0 1.5em;
+}
