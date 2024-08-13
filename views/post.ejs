@@ -9,36 +9,55 @@
   <body>
     <%- include("partials/header") -%>
 
-    <h1>All Posts</h1>
+    <!-- <h1>All Posts</h1> -->
 
     <div class="container-post">
       <% if (posts.length === 0) { %>
-        <p>No posts available.</p>
-      <% } else { %>
-        <% posts.forEach(post => { %>
-          <div class="post">
-            <h2><%= post.Title %></h2> <!-- Ensure the key matches your Firestore field -->
-            <div class="post-image">
-              <% if (post.Image) { %> <!-- Ensure the key matches your Firestore field -->
-                <img src="<%= post.Image %>" alt="<%= post.Title %> Image" style="max-width: 100%; height: auto;">
-              <% } else { %>
-                <img src="/images/default.jpg" alt="Default Image" style="max-width: 100%; height: auto;">
-              <% } %>
-            </div>
-            <div class="post-content">
-              <%- post.Content %> <!-- Ensure the key matches your Firestore field -->
-            </div>
-            <% if (user && user.uid === post.AuthorId) { %> <!-- Match user ID with AuthorId -->
-              <div class="post-actions">
-                <a href="/edit/<%= post.id %>">Edit</a>
-                <a href="/delete/<%= post.id %>" onclick="return confirm('Are you sure you want to delete this post?');">Delete</a>
-              </div>
-            <% } %>
+      <p>No posts available.</p>
+      <% } else { %> <% posts.forEach(post => { %>
+      <div class="post-card">
+        <!-- Ensure the key matches your Firestore field -->
+        <div class="post-image">
+          <% if (post.Image) { %>
+          <!-- Ensure the key matches your Firestore field -->
+          <img src="<%= post.Image %>" alt="<%= post.Title %> Image" />
+          <% } else { %>
+          <img src="/images/default.jpg" alt="Default Image" />
+          <% } %>
+        </div>
+        <div style="display: flex; align-items: center">
+          <div class="icon-box">
+            <p class="span">Business Trip</p>
           </div>
-        <% }) %>
-      <% } %>
+          <% if (user && user.uid === post.AuthorId) { %>
+          <div class="post-actions">
+            <button class="post-edit-button">
+              <a href="/edit/<%= post.id %>"
+                ><img src="images/pen-to-square-solid.svg" alt=""
+              /></a>
+            </button>
+          </div>
+          <% } %>
+        </div>
+        <div class="post-content">
+          <h2 class="post-h3"><%= post.Title %></h2>
+          <p class="post-p"><%- post.Content %></p>
+          <!-- Ensure the key matches your Firestore field -->
+        </div>
+        <% if (user && user.uid === post.AuthorId) { %>
+        <!-- Match user ID with AuthorId -->
+        <div class="post-delete">
+          <a
+            href="/delete/<%= post.id %>"
+            onclick="return confirm('Are you sure you want to delete this post?');"
+            >Delete</a
+          >
+        </div>
+        <% } %>
+      </div>
+      <% }) %> <% } %>
     </div>
 
-    <!-- <%- include("partials/footer") -%> -->
+    <%- include("partials/footer") -%>
   </body>
 </html>

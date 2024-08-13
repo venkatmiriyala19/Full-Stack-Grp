@@ -1,67 +1,168 @@
-/* General container styling */
+@import url("https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Dongle&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 .container-post {
-  width: 80%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
+  margin-top: 3vh;
+}
+.post-card {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  background: white;
+  border-radius: 2vw;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  overflow: hidden;
+  margin: 20px;
+  cursor: pointer;
+  border: 1px solid white;
+  transition: all 0.5s;
+  backdrop-filter: blur(6px);
+}
+.post-card:hover {
+  border: 1px solid #393e46;
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.post-card:active {
+  transform: scale(0.95) rotateZ(1.7deg);
 }
 
-/* Post styling */
-.post {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Title styling */
-.post h2 {
-  font-size: 1.5em;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-/* Image styling */
 .post-image {
-  margin-bottom: 10px;
+  width: 100%;
+  height: 240px;
+  background-color: transparent; /* Remove any background color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0; /* Ensure no padding */
+  border: none;
 }
 
 .post-image img {
-  border-radius: 8px;
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: 0;
 }
 
-/* Content styling */
 .post-content {
-  font-size: 1em;
-  line-height: 1.6;
-  color: #555;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 0;
 }
 
-/* Actions styling */
+.post-content .post-h3 {
+  font-size: 3vh;
+  font-weight: bold;
+  color: #00adb5;
+  margin: 0 0 10px 5px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  /* Add ellipsis when content overflows */
+  text-overflow: ellipsis;
+}
+
+.post-content .post-p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.post-content p {
+  margin-top: 0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  overflow: hidden;
+  /* Limit to two lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  /* Add ellipsis when content overflows */
+  text-overflow: ellipsis;
+  margin: -5px 0 10px 5px;
+}
+
 .post-actions {
-  margin-top: 10px;
+  position: absolute;
+  right: 1vw;
 }
 
 .post-actions a {
-  color: #007bff;
+  font-family: "Lucida Sans", sans-serif;
+  font-size: 14px;
+  color: #9198e5;
   text-decoration: none;
-  font-weight: bold;
-  margin-right: 10px;
+  transition: color 0.2s ease;
 }
 
 .post-actions a:hover {
-  text-decoration: underline;
+  color: #666;
 }
 
-/* No posts message */
-.container p {
-  font-size: 1.2em;
-  color: #666;
+/* Icon Box */
+.icon-box {
+  background-color: #393e4655;
+  border-radius: 25px;
+  display: inline-block;
+  margin: 1vw;
+  padding: 0 1vw; /* Make icon-box shrink to fit its content */
+}
+
+.icon-box .span {
+  font-size: 2vh;
+  font-weight: 500;
+  color: #fff;
+  margin: 0.5vw 0.5vw;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+/* From Uiverse.io by alexroumi */
+/* From Uiverse.io by xueyuantan */
+.post-edit-button {
+  width: 3em;
+  height: 3em;
+  border-radius: 30em;
+  font-size: 15px;
+  font-family: inherit;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+}
+
+.post-edit-button::before {
+  content: "";
+  width: 0;
+  height: 3em;
+  border-radius: 30em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-image: linear-gradient(to right, #00adb5 0%, #eeee 100%);
+  transition: 0.5s ease;
+  display: block;
+  z-index: -1;
+}
+
+.post-edit-button:hover::before {
+  width: 9em;
+}
+.post-edit-button a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.post-edit-button a img {
+  width: 20px;
+  padding: 5px;
 }
