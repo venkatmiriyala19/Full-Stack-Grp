@@ -44,6 +44,7 @@
           <p class="post-p"><%- post.Content %></p>
           <!-- Ensure the key matches your Firestore field -->
         </div>
+        <div style="margin-bottom: 8vh"></div>
         <% if (user && user.uid === post.AuthorId) { %>
         <!-- Match user ID with AuthorId -->
         <div class="post-delete">
