@@ -184,9 +184,10 @@
   border-top: 1px solid #ef4444;
   width: 100%;
   overflow: visible; /* Allow overflow so the tooltip can be visible */
-  position: relative; /* Positioning context for ::before */
+  position: absolute; /* Positioning context for ::before */
   transition: background-color 250ms;
   bottom: 0;
+  margin-top: 10vw;
 }
 
 .post-delete a {
