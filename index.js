@@ -4,19 +4,21 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const multer = require("multer");
 const { initializeApp, cert } = require("firebase-admin/app");
-const { getFirestore } = require("firebase-admin/firestore");
+const { getFirestore, Timestamp, FieldValue } = require("firebase-admin/firestore");
 const { getStorage } = require("firebase-admin/storage");
 const { getAuth } = require("firebase-admin/auth");
 const key = require("./firebase.json");
 
 // Initialize Firebase Admin SDK with storageBucket
+
 initializeApp({
   credential: cert(key),
   storageBucket: "node401app.appspot.com",
 });
 
-
 const db = getFirestore();
+db.settings({ ignoreUndefinedProperties: true });
+
 const bucket = getStorage().bucket();
 const auth = getAuth();
 
@@ -155,13 +157,17 @@ app.get("/compose", isAuthenticated, (req, res) => {
 });
 
 app.post("/compose", isAuthenticated, upload.single("image"), async (req, res) => {
-  const title = req.body.blogtitle;
-  const content = req.body.blogpost;
+  const title = req.body.blogtitle || "Untitled"; // Provide default title if not present
+  const content = req.body.blogpost; // Ensure this field is properly populated
   const category = req.body.category || 'Uncategorized'; // Provide a default value if category is undefined
   const location = req.session.user.location; // Get location from session
   const authorId = req.session.user.uid;
   const authorName = req.session.user.name;
   const image = req.file;
+
+  if (!content) {
+    return res.status(400).send("Content cannot be empty. Please provide a valid blog post.");
+  }
 
   let imageURL = null;
 
@@ -172,13 +178,13 @@ app.post("/compose", isAuthenticated, upload.single("image"), async (req, res) =
       await storageRef.save(image.buffer);
       imageURL = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(storageRef.name)}?alt=media`;
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.error("Error uploading image:", error.message);
       return res.status(500).send("Error uploading image. Please try again later.");
     }
   }
 
   try {
-    const docRef = await db.collection("Cities")
+    await db.collection("Cities")
       .doc(location)
       .collection("UnityThread")
       .add({
@@ -193,10 +199,12 @@ app.post("/compose", isAuthenticated, upload.single("image"), async (req, res) =
 
     res.redirect("/post");
   } catch (error) {
-    console.error("Error posting:", error);
+    console.error("Error posting:", error.message);
     res.status(500).send("Error posting. Please try again later.");
   }
 });
+
+
 
 
 

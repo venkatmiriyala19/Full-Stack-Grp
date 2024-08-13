@@ -1,38 +1,161 @@
-<%- include("partials/header") -%>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compose</title>
+    <link rel="stylesheet" href="css/compose.css" />
+  </head>
+  <body>
+    <%- include("partials/header") -%>
 
-<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+    <div class="compose-outer-container">
+      <div class="compose-form-container">
+        <h1 class="compose-form-header">Compose your Thread</h1>
 
-<h1>You are posting as <%= user %> </h1>
+        <form action="/compose" method="post" enctype="multipart/form-data">
+          <div class="compose-form-group">
+            <!-- <label for="postimage">Thread Image</label> -->
+            <div class="compose-image-container">
+              <div class="upload-outer-container">
+                <div class="upload-container">
+                  <label for="file-upload" class="custom-file-upload">
+                    <div class="upload-icon">
+                      <img
+                        id="preview"
+                        src="images/upload.png"
+                        alt="Image Preview"
+                        style="height: 3rem"
+                      />
+                      <p>Browse File to upload!</p>
+                    </div>
+                  </label>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    accept="image/*"
+                    style="display: none"
+                    onchange="previewFile()"
+                    name="image"
+                  />
+                </div>
+                <div class="file-info">
+                  <p id="file-name">Not selected file</p>
+                  <span
+                    id="remove-file"
+                    onclick="removeFile()"
+                    style="display: none; cursor: pointer"
+                    ><img
+                      src="images/delete.png"
+                      alt="delete"
+                      style="height: 1.5rem"
+                  /></span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-<form class="" action="/compose" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-      <label for="blogtitle">Title</label>
-      <input class="form-control" type="text" name="blogtitle" value="" placeholder="Write your Title">
+          <div class="compose-form-group">
+            <label for="blogtitle">Thread Title</label>
+            <input
+              class="compose-form-control"
+              type="text"
+              name="blogtitle"
+              placeholder="Write your Title"
+            />
+          </div>
+
+          <div class="compose-form-group">
+            <label for="category">Thread Category</label>
+            <select id="options" class="compose-form-control" name="category" style="width:100%">
+              <option value="General Discussion">General Discussion</option>
+              <option value="Announcements">Announcements</option>
+              <option value="Government Announcements">
+                Government Announcements
+              </option>
+              <option value="Review">Review</option>
+            </select>
+          </div>
+
+          <div class="compose-form-group">
+            <label for="blogpost">Thread Post</label>
+            <textarea
+              class="compose-form-control"
+              name="blogpost"
+              rows="10"
+              placeholder="Write your Post here"
+            ></textarea>
+          </div>
+
+          <button class="compose-form-button" type="submit" name="button">
+            <svg
+              class="w-6 h-6"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
+                stroke-linejoin="round"
+                stroke-linecap="round"
+              ></path>
+            </svg>
+            <div class="button-text">Publish</div>
+          </button>
+        </form>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="postimage">Post Image</label>
-      <input class="form-control" type="file" name="image" accept="image/*">
-    </div>
-    <div class="form-group">
-      <label for="category">Category</label>
-      <input type="text" name="category" list="options">
-      <datalist id="options">
-        <option value="General Discussion">General Discussion</option>
-        <option value="Announcements">Announcements</option>
-        <option value="Government Announcements">Government Announcements</option>
-        <option value="Review">Review</option>
-      </datalist>
-    </div>
-    
-    <div id="editor" class="form-group">
-      <label for="blogpost">Post</label>
-      <textarea class="form-control form-control-lg" rows="5" cols="30" name="blogpost" placeholder="Write your text"></textarea>
-    </div>
+
     <script>
       CKEDITOR.replace("blogpost");
-    </script>
-    <button class="btn btn-primary" type="submit" name="button">Publish</button>
-  </form>
-  
 
-<!-- <%- include("partials/footer") -%> -->
+      function previewFile() {
+        const file = document.getElementById("file-upload").files[0];
+        const preview = document.getElementById("preview");
+        const fileName = document.getElementById("file-name");
+        const removeFile = document.getElementById("remove-file");
+
+        if (file) {
+          const reader = new FileReader();
+
+          reader.onloadend = function () {
+            preview.src = reader.result;
+            preview.style.display = "block";
+            preview.style.height = "auto";
+          };
+
+          reader.readAsDataURL(file);
+
+          // Truncate file name if it's too long
+          if (file.name.length > 18) {
+            fileName.textContent = file.name.substring(0, 18) + "....";
+          } else {
+            fileName.textContent = file.name;
+          }
+
+          removeFile.style.display = "inline";
+        }
+      }
+
+      function removeFile() {
+        const fileInput = document.getElementById("file-upload");
+        const preview = document.getElementById("preview");
+        const fileName = document.getElementById("file-name");
+        const removeFile = document.getElementById("remove-file");
+
+        fileInput.value = ""; // Reset the file input
+        preview.src = "images/upload.png";
+        preview.style.display = "none";
+        fileName.textContent = "Not selected file";
+        preview.style.height = "2rem";
+
+        removeFile.style.display = "none";
+      }
+    </script>
+
+    <%- include("partials/footer") -%>
+  </body>
+</html>
