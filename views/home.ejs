@@ -6,18 +6,26 @@
     <title>commUnity</title>
     <link rel="stylesheet" href="css/home.css" />
   </head>
+  <style>
+    /* Optional: Ensure no conflicting scroll behavior styles */
+    html {
+      scroll-behavior: auto; /* Reset to default if necessary */
+    }
+    #progressbar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 15px;
+      border-radius: 10px;
+      background: linear-gradient(to top, #222831, #393e46, #00adb5, #eeeeee);
+      z-index: 999;
+    }
+  </style>
   <body>
-    <nav>
-      <div class="container">
-        <h1 class="logo">Recipe-book</h1>
-        <ul class="nav-links">
-          <li><a href="/signin">Signin</a></li>
-          <li><a href="/signup">SignUp</a></li>
-        </ul>
-      </div>
-    </nav>
+    <div id="progressbar"></div>
     <div id="vanta">
       <!-- First Sectiom -->
+      <%- include('partials/onboardingHeader') %>
 
       <div class="first-section">
         <img
@@ -33,10 +41,8 @@
         <button class="button" id="getStartedButton">Get Started</button>
       </div>
     </div>
-
     <!-- Second section -->
-
-    <div class="second-section">
+    <div class="second-section" id="section2">
       <div style="display: flex">
         <div class="second-section-inner-container">
           <h1>
@@ -56,7 +62,6 @@
         </p>
       </div>
 
-      <!-- Second Section -->
       <div class="second-section-icons">
         <div>
           <div class="second-section-icon-container">
@@ -114,7 +119,7 @@
 
     <!-- Fourth section(Accroding to code) -->
 
-    <div class="fourth-section">
+    <div class="fourth-section" id="section4">
       <div id="left-container">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.1/lottie.min.js"></script>
         <script>
@@ -138,13 +143,14 @@
 
     <!-- Third Section -->
 
-    <div class="third-section">
+    <div class="third-section" id="section3">
       <div class="find-clubs-header">
         <h1 class="find-clubs-h1">
           Find <span style="color: #00adb5">the perfect club </span>for you
         </h1>
         <p class="find-clubs-p">
-          Find the perfect club tailored to your interests and passions. <br />
+          Find the perfect club tailored to your interests and passions.
+          <br />
           Explore a diverse range of clubs and connect with like-minded
           individuals today!
         </p>
@@ -206,7 +212,7 @@
       </h1>
     </div>
     <hr />
-    <div class="fifth-section">
+    <div class="fifth-section" id="section5">
       <h1 class="reviews-h1">
         <span style="color: #00adb5"> Rate and write reviews</span> on places in
         your community.
@@ -364,6 +370,7 @@
         </li>
       </ul>
     </div>
+
     <%- include('partials/footer') %>
   </body>
 
@@ -384,6 +391,27 @@
       gyroControls: false,
       minHeight: 200.0,
       minWidth: 200.0,
+    });
+  </script>
+  <script>
+    // Smooth scroll behavior using JavaScript
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute("href")).scrollIntoView({
+          behavior: "smooth",
+        });
+      });
+    });
+  </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(window).on("scroll", function () {
+      var scroll = $(window).scrollTop();
+      var dh = $(document).height();
+      var wh = $(window).height();
+      var scrollPercent = (scroll / (dh - wh)) * 100;
+      $("#progressbar").css("height", scrollPercent + "%");
     });
   </script>
 </html>
