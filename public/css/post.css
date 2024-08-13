@@ -6,7 +6,7 @@
 }
 .post-card {
   width: 100%;
-  max-width: 350px;
+  max-width: 22vw;
   height: auto;
   background: white;
   border-radius: 2vw;
@@ -38,6 +38,7 @@
   overflow: hidden;
   padding: 0; /* Ensure no padding */
   border: none;
+  margin-bottom: 1vh;
 }
 
 .post-image img {
@@ -137,7 +138,7 @@
   position: relative;
   overflow: hidden;
   z-index: 1;
-  box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+  /* box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff; */
 }
 
 .post-edit-button::before {
@@ -165,4 +166,59 @@
 .post-edit-button a img {
   width: 20px;
   padding: 5px;
+  transition: 0.5s ease-in-out;
+}
+.post-edit-button a img::before {
+  transition: 0.5s ease-in-out;
+}
+
+.post-edit-button:hover a img {
+  transform: scale(1); /* Optional: slightly enlarges the image on hover */
+  opacity: 1; /* Optional: slightly reduces the opacity on hover */
+  content: url("../images/pen-to-square-solid-image.svg"); /* Change the image on hover */
+  z-index: 999;
+  transition: 0.5s ease-in-out;
+}
+.post-delete {
+  background-color: #fff;
+  border-top: 1px solid #ef4444;
+  width: 100%;
+  overflow: hidden; /* Hide the overflowing content */
+  position: relative; /* Positioning context for ::before */
+  transition: background-color 250ms;
+  bottom: 0;
+}
+.post-delete a {
+  display: flex;
+  justify-content: center;
+}
+.post-delete a img {
+  width: 20px;
+  margin: 5px 0;
+}
+.post-delete a img:hover {
+  transform: scale(1); /* Optional: slightly enlarges the image on hover */
+  opacity: 1; /* Optional: slightly reduces the opacity on hover */
+  content: url("../images/trash-can-solid-white.svg"); /* Change the image on hover */
+  z-index: 999;
+}
+.post-delete::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%; /* Start outside of the view from the left */
+  height: 100%;
+  width: 100%;
+  background-color: #ef4444;
+  transition: left 250ms;
+  border-radius: 0 0vw 2vw 0;
+  /* Transition for left position */
+}
+
+.post-delete:hover::before {
+  left: 0; /* Move it to the view */
+}
+
+.post-delete:hover {
+  color: white; /* Optional: Change text color on hover */
 }

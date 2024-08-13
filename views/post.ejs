@@ -50,8 +50,18 @@
           <a
             href="/delete/<%= post.id %>"
             onclick="return confirm('Are you sure you want to delete this post?');"
-            >Delete</a
           >
+            <img
+              src="images/trash-can-solid.svg"
+              class="trash-red"
+              alt="Trash Can Red"
+            />
+            <img
+              src="images/trash-can-solid-white.svg"
+              class="trash-white"
+              alt="Trash Can White"
+            />
+          </a>
         </div>
         <% } %>
       </div>
