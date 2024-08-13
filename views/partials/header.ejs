@@ -1,25 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>commUnity</title>
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
-  <body>
-    <nav>
-      <div class="container">
-        <img
-          src="images/commUnity-logo.png"
-          alt="commUnity-logo"
-          class="first-section-logo"
-        />
+    <link rel="stylesheet" href="css/header.css">
+</head>
+<body>
+    <nav class="container-header">
+        <div class="logo-header" id="logo-header">
+            <img src="images/commUnity-logo.png" alt="Logo"> <!-- Replace with your logo path -->
+        </div>
         <ul class="nav-links">
-          <li><a href="/post">Post</a></li>
-          <li><a href="/compose">Compose</a></li>
-          <li><a href="/signout">Logout</a></li>
+            <li><a href="/views/compose">Unity Threads</a></li>
+            <li><a href="/views/posts">Posts</a></li>
+            <li><a href="/post">Compose</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="#">Blog</a></li>
         </ul>
-      </div>
+        <div class="nav-button">
+          <form action="/signout" method="POST">
+            <button type="submit" class="request-demo">Logout</button>
+        </form>
+        </div>
     </nav>
-  </body>
+</body>
+<script>
+  document
+    .getElementById("logo-header")
+    .addEventListener("click", function () {
+      window.location.href = "/home2";
+    });
+</script>
 </html>

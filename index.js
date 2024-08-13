@@ -15,7 +15,6 @@ initializeApp({
   storageBucket: "node401app.appspot.com",
 });
 
-
 const db = getFirestore();
 const bucket = getStorage().bucket();
 const auth = getAuth();
@@ -51,13 +50,19 @@ function isAuthenticated(req, res, next) {
   }
 }
 
+// Routes
+
+// Home route
 app.get("/", (req, res) => {
   res.render("home");
 });
-app.get("/Home2", (req, res) => {
-  res.render("Home2");
+
+// Authenticated home route
+app.get("/home2", isAuthenticated, (req, res) => {
+  res.render("home2", { user: req.session.user });
 });
 
+// Sign up route
 app.get("/signup", (req, res) => {
   res.render("signup");
 });
@@ -92,14 +97,14 @@ app.post("/signupsubmit", async (req, res) => {
       });
 
     // Redirect to signin page after successful signup
-    res.redirect("/");
+    res.redirect("/signin");
   } catch (error) {
     console.error("Error signing up:", error.message);
     res.status(500).send(`Error signing up: ${error.message}`);
   }
 });
 
-
+// Sign in route
 app.get("/signin", (req, res) => {
   res.render("signin");
 });
@@ -134,7 +139,7 @@ app.post("/signinsubmit", async (req, res) => {
       location: cityDoc.data().Location, // Include location in session
     };
 
-    res.redirect("/Home2");
+    res.redirect("/home2");
   } catch (error) {
     console.error("Error signing in:", error);
 
@@ -147,9 +152,7 @@ app.post("/signinsubmit", async (req, res) => {
   }
 });
 
-
-
-
+// Compose route
 app.get("/compose", isAuthenticated, (req, res) => {
   res.render("compose", { user: req.session.user.name });
 });
@@ -178,7 +181,7 @@ app.post("/compose", isAuthenticated, upload.single("image"), async (req, res) =
   }
 
   try {
-    const docRef = await db.collection("Cities")
+    await db.collection("Cities")
       .doc(location)
       .collection("UnityThread")
       .add({
@@ -198,8 +201,7 @@ app.post("/compose", isAuthenticated, upload.single("image"), async (req, res) =
   }
 });
 
-
-
+// Posts route
 app.get("/post", isAuthenticated, async (req, res) => {
   const location = req.session.user.location; // Get location from session
 
@@ -221,12 +223,18 @@ app.get("/post", isAuthenticated, async (req, res) => {
   }
 });
 
-
+// Single post route
 app.get("/post/:id", isAuthenticated, async (req, res) => {
   const postId = req.params.id;
+  const location = req.session.user.location; // Get location from session
 
   try {
-    const postDoc = await db.collection("posts").doc(postId).get();
+    // Retrieve the post from the user's location
+    const postDoc = await db.collection("Cities")
+      .doc(location)
+      .collection("UnityThread")
+      .doc(postId)
+      .get();
 
     if (!postDoc.exists) {
       return res.status(404).send("Post not found");
@@ -234,14 +242,15 @@ app.get("/post/:id", isAuthenticated, async (req, res) => {
 
     const post = postDoc.data();
     console.log("Post data:", post); 
-    res.render("post", post);
+    res.render("singlePost", { post, user: req.session.user }); // Use a new template 'singlePost.ejs'
   } catch (error) {
     console.error("Error fetching post:", error);
     res.status(500).send("Error fetching post. Please try again later.");
   }
 });
 
-app.get("/signout", (req, res) => {
+// Sign out route
+app.post("/signout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       return res.status(500).send("Error signing out. Please try again later.");
@@ -250,6 +259,7 @@ app.get("/signout", (req, res) => {
   });
 });
 
+// Start the server
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });

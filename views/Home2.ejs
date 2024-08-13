@@ -1,6 +1,45 @@
 <%- include("partials/header") -%>
+<link rel="stylesheet" href="css/home2.css" />
+
+<div id="vanta">
+  <!-- First Sectiom -->
+
+  <div class="first-section">
+    <img
+      src="images/commUnity-logo.png"
+      alt="commUnity-logo"
+      class="first-section-logo"
+    />
+    <h1 class="first-section-tagline">
+      Build a stronger community,<span style="color: #00adb5"
+        >together.</span
+      >
+    </h1>
+    <button class="button" id="getStartedButton">Get Started</button>
+  </div>
+</div>
 
 
+
+  <script>
+    document
+      .getElementById("getStartedButton")
+      .addEventListener("click", function () {
+        window.location.href = "/compose";
+      });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.clouds.min.js"></script>
+  <script type="text/javascript">
+    VANTA.CLOUDS({
+      el: "#vanta",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.0,
+      minWidth: 200.0,
+    });
+  </script>
 
 
 
