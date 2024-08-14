@@ -1,0 +1,176 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inconsolata:wght@200..900&family=Kanit&family=Play:wght@400;700&family=Poppins:wght@400;500&family=Protest+Guerrilla&family=Protest+Strike&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Sixtyfour&family=Smooch+Sans:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Dongle&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@import url('https://fonts.googleapis.com/css?family=Exo:400,700');
+
+
+#vanta {
+  height: 90vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.first-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.first-section-logo {
+  height: 100px;
+  width: 550px;
+}
+.first-section-tagline {
+  font-family: "Dongle", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 9vh;
+  margin: 0;
+  color: #393e46;
+}
+  .button {
+    display: inline-block;
+    padding: 12px 24px;
+    border: 1.5px solid #393e46;
+    border-radius: 4px;
+    transition: all 0.2s ease-in;
+    position: relative;
+    overflow: hidden;
+    font-size: 3vh;
+    cursor: pointer;
+    color: #393e46;
+    z-index: 1;
+    background: none;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+  }
+  
+  .button:before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) scaleY(1) scaleX(1.25);
+    top: 100%;
+    width: 140%;
+    height: 180%;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    display: block;
+    transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+    z-index: -1;
+  }
+  
+  .button:after {
+    content: "";
+    position: absolute;
+    left: 55%;
+    transform: translateX(-50%) scaleY(1) scaleX(1.45);
+    top: 180%;
+    width: 160%;
+    height: 190%;
+    background-color: #393e46;
+    border-radius: 50%;
+    display: block;
+    transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+    z-index: -1;
+  }
+  
+  .button:hover {
+    color: #ffffff;
+    border: 1.5px solid #393e46;
+  }
+  
+  .button:hover:before {
+    top: -35%;
+    background-color: #393e46;
+    transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+  }
+  
+  .button:hover:after {
+    top: -45%;
+    background-color: #393e46;
+    transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+  }
+
+  /* Styling for the section title */
+.section-title {
+  font-size: 24px;
+  margin: 20px 0;
+  color: #333;
+}
+
+/* Container for the posts */
+.post-container {
+  margin: 40px 0;
+  padding: 0 20px;
+  overflow-x: auto;
+}
+
+/* Horizontal scrollable container without scrollbar */
+.post-scroll {
+  display: flex;
+  overflow-x: scroll;
+  padding-bottom: 10px;
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+}
+
+.post-scroll::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
+/* Styling for individual post cards */
+.post-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-right: 20px;
+  min-width: 300px;
+  max-width: 300px;
+  transition: transform 0.3s ease;
+}
+
+.post-card:hover {
+  transform: scale(1.05);
+}
+
+/* Styling for post images */
+.post-image {
+  width: 100%;
+  height: 180px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  object-fit: cover;
+}
+
+/* Container for the post content */
+.post-content {
+  padding: 15px;
+}
+
+/* Styling for post titles */
+.post-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #00adb5;
+}
+
+/* Styling for post excerpt */
+.post-excerpt {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 15px;
+}
+
+/* Styling for the read more link */
+.post-link {
+  text-decoration: none;
+  color: #00adb5;
+  font-weight: bold;
+}
+
+.post-link:hover {
+  text-decoration: underline;
+}
