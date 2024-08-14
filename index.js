@@ -58,13 +58,30 @@ app.get("/", (req, res) => {
 });
 
 // Authenticated home route
-app.get("/home2", isAuthenticated, (req, res) => {
-  res.render("home2", { user: req.session.user });
+app.get("/home2", isAuthenticated, async (req, res) => {
+  const location = req.session.user.location;
+
+  try {
+    const postsSnapshot = await db.collection("Cities")
+      .doc(location)
+      .collection("UnityThread")
+      .get();
+
+    const posts = postsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+    res.render("home2", { user: req.session.user, posts });
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.status(500).send("Error fetching posts. Please try again later.");
+  }
 });
 
 // Sign up route
 app.get("/signup", (req, res) => {
   res.render("signup");
+});
+app.get("/about",(req,res)=>{
+  res.render("about",{ user: req.session.user })
 });
 
 app.post("/signupsubmit", async (req, res) => {
@@ -248,6 +265,52 @@ app.get("/post/:id", isAuthenticated, async (req, res) => {
     res.status(500).send("Error fetching post. Please try again later.");
   }
 });
+
+// Fetch messages for a specific city
+
+app.get("/chat",isAuthenticated, (req, res) => {
+  res.render("chat", { user: req.session.user.name });
+});
+app.get("/chat/:city", isAuthenticated, async (req, res) => {
+  const city = req.params.city;
+
+  try {
+    const messagesSnapshot = await db.collection("Cities").doc(city).collection("Chat")
+      .orderBy("timestamp", "asc")
+      .get();
+
+    const messages = messagesSnapshot.docs.map(doc => doc.data());
+    res.json(messages);
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    res.status(500).send("Error fetching messages");
+  }
+});
+
+// Send a message to the chat
+app.post("/chat/:city", isAuthenticated, async (req, res) => {
+  const city = req.params.city;
+  const { text } = req.body;
+  const sender = req.session.user.name;
+
+  if (!text) {
+    return res.status(400).send("Message text is required");
+  }
+
+  try {
+    await db.collection("Cities").doc(city).collection("Chat").add({
+      sender: sender,
+      text: text,
+      timestamp: new Date(),
+    });
+
+    res.status(200).send("Message sent");
+  } catch (error) {
+    console.error("Error sending message:", error);
+    res.status(500).send("Error sending message");
+  }
+});
+
 
 // Sign out route
 app.post("/signout", (req, res) => {

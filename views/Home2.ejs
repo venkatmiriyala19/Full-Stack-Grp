@@ -15,7 +15,25 @@
         >together.</span
       >
     </h1>
-    <button class="button" id="getStartedButton">Get Started</button>
+    <button class="button" id="getStartedButton">Create your Unity Thread</button>
+  </div>
+</div>
+
+<!-- Horizontal Scrollable Post Cards Section -->
+<!-- Horizontal Scrollable Post Cards Section -->
+<div class="post-container">
+  <h2 class="section-title">Latest Unity Threads</h2>
+  <div class="post-scroll">
+    <% posts.forEach(function(post) { %>
+      <div class="post-card">
+        <img src="<%= post.Image %>" alt="<%= post.Title %>" class="post-image" />
+        <div class="post-content">
+          <h3 class="post-title"><%= post.Title %></h3>
+          <p class="post-excerpt"><%= post.Content.substring(0, 100) %>...</p>
+          <a href="/post/<%= post.id %>" class="post-link">Read More</a>
+        </div>
+      </div>
+    <% }); %>
   </div>
 </div>
 
