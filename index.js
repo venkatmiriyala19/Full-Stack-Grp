@@ -12,12 +12,15 @@ const {
 const { getStorage } = require("firebase-admin/storage");
 const { getAuth } = require("firebase-admin/auth");
 const key = require("./firebase.json");
+const admin = require("firebase-admin");
+const { getDatabase } = require("firebase-admin/database"); // Import for Realtime Database
 
 // Initialize Firebase Admin SDK with storageBucket
 
 initializeApp({
   credential: cert(key),
   storageBucket: "node401app.appspot.com",
+  databaseURL: "https://node401app-default-rtdb.firebaseio.com",
 });
 
 const db = getFirestore();
@@ -28,6 +31,7 @@ const auth = getAuth();
 
 const app = express();
 const port = 3020;
+const rtdb = getDatabase(); // Realtime Database
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // Add this line to parse JSON requests
@@ -69,12 +73,16 @@ app.get("/home2", isAuthenticated, async (req, res) => {
   const location = req.session.user.location;
 
   try {
-    const postsSnapshot = await db.collection("Cities")
+    const postsSnapshot = await db
+      .collection("Cities")
       .doc(location)
       .collection("UnityThread")
       .get();
 
-    const posts = postsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const posts = postsSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
     res.render("home2", { user: req.session.user, posts });
   } catch (error) {
@@ -87,8 +95,8 @@ app.get("/home2", isAuthenticated, async (req, res) => {
 app.get("/signup", (req, res) => {
   res.render("signup");
 });
-app.get("/about",(req,res)=>{
-  res.render("about",{ user: req.session.user })
+app.get("/about", (req, res) => {
+  res.render("about", { user: req.session.user });
 });
 
 app.post("/signupsubmit", async (req, res) => {
@@ -186,8 +194,6 @@ app.post("/signinsubmit", async (req, res) => {
   }
 });
 
-
-
 app.get("/compose", isAuthenticated, (req, res) => {
   res.render("compose", { user: req.session.user.name });
 });
@@ -251,9 +257,8 @@ app.post(
       console.error("Error posting:", error.message);
       res.status(500).send("Error posting. Please try again later.");
     }
-  });
-
-
+  }
+);
 
 app.get("/post", isAuthenticated, async (req, res) => {
   const location = req.session.user.location; // Get location from session
@@ -286,7 +291,8 @@ app.get("/post/:id", isAuthenticated, async (req, res) => {
 
   try {
     // Retrieve the post from the user's location
-    const postDoc = await db.collection("Cities")
+    const postDoc = await db
+      .collection("Cities")
       .doc(location)
       .collection("UnityThread")
       .doc(postId)
@@ -297,7 +303,7 @@ app.get("/post/:id", isAuthenticated, async (req, res) => {
     }
 
     const post = postDoc.data();
-  console.log("Post data:", post); 
+    console.log("Post data:", post);
     res.render("post", post);
   } catch (error) {
     console.error("Error fetching post:", error);
@@ -305,51 +311,33 @@ app.get("/post/:id", isAuthenticated, async (req, res) => {
   }
 });
 
-// Fetch messages for a specific city
-
-app.get("/chat",isAuthenticated, (req, res) => {
-  res.render("chat", { user: req.session.user.name });
-});
-app.get("/chat/:city", isAuthenticated, async (req, res) => {
-  const city = req.params.city;
-
-  try {
-    const messagesSnapshot = await db.collection("Cities").doc(city).collection("Chat")
-      .orderBy("timestamp", "asc")
-      .get();
-
-    const messages = messagesSnapshot.docs.map(doc => doc.data());
-    res.json(messages);
-  } catch (error) {
-    console.error("Error fetching messages:", error);
-    res.status(500).send("Error fetching messages");
-  }
+app.get("/chat", isAuthenticated, (req, res) => {
+  res.render("chat", { user: req.session.user });
 });
 
-// Send a message to the chat
-app.post("/chat/:city", isAuthenticated, async (req, res) => {
-  const city = req.params.city;
-  const { text } = req.body;
-  const sender = req.session.user.name;
+app.post("/chat", isAuthenticated, async (req, res) => {
+  const location = req.session.user.location;
+  const userName = req.session.user.name;
+  const message = req.body.message;
 
-  if (!text) {
-    return res.status(400).send("Message text is required");
+  if (!message || message.trim() === "") {
+    return res.status(400).send("Message cannot be empty");
   }
 
   try {
-    await db.collection("Cities").doc(city).collection("Chat").add({
-      sender: sender,
-      text: text,
-      timestamp: new Date(),
+    const newMessageRef = rtdb.ref(`Cities/${location}/Chats`).push(); // Use rtdb here
+    await newMessageRef.set({
+      userName: userName,
+      message: message,
+      timestamp: new Date().toISOString(),
     });
 
-    res.status(200).send("Message sent");
+    res.status(200).send("Message sent successfully");
   } catch (error) {
-    console.error("Error sending message:", error);
-    res.status(500).send("Error sending message");
+    console.error("Error sending message:", error.message);
+    res.status(500).send("Error sending message. Please try again later.");
   }
 });
-
 
 // Sign out route
 app.post("/signout", (req, res) => {
