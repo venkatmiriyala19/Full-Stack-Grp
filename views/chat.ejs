@@ -1,59 +1,82 @@
-<%- include("partials/header") -%>
-<link rel="stylesheet" href="/css/chat.css" />
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat</title>
+    <!-- Optional: Add your CSS file for styling -->
+  </head>
+  <body>
+    <h1>Chat Room - <%= user.location %></h1>
+    <div id="chat-box"></div>
 
-<div class="chat-container">
-  <div class="chat-header">
-    <h2>Community Chat - <%= user.location %></h2>
-  </div>
-  <div class="chat-messages" id="chatMessages"></div>
-  <div class="chat-input">
-    <input type="text" id="chatInput" placeholder="Type your message..." />
-    <button id="sendButton">Send</button>
-  </div>
-</div>
+    <form id="chat-form" action="/chat" method="POST">
+      <input
+        type="text"
+        name="message"
+        id="message-input"
+        placeholder="Type your message..."
+        required
+      />
+      <button type="submit">Send</button>
+    </form>
 
-<script>
-  const city = '<%= user.location %>';
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
 
-  // Fetch messages when the page loads
-  async function fetchMessages() {
-    const response = await fetch(`/chat/${city}`);
-    const messages = await response.json();
-    const chatMessages = document.getElementById('chatMessages');
-    chatMessages.innerHTML = '';
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDINlS7PqxjzKuarFE5Rr7_jQ84DLwjCOM",
+        authDomain: "node401app.firebaseapp.com",
+        databaseURL: "https://node401app-default-rtdb.firebaseio.com",
+        projectId: "node401app",
+        storageBucket: "node401app.appspot.com",
+        messagingSenderId: "166278817365",
+        appId: "1:166278817365:web:4585d2858221e5bc2a96dc",
+        measurementId: "G-JWX0GWT5T3",
+      };
 
-    messages.forEach(message => {
-      const messageDiv = document.createElement('div');
-      messageDiv.className = 'chat-message';
-      messageDiv.innerHTML = `<strong>${message.sender}:</strong> ${message.text}`;
-      chatMessages.appendChild(messageDiv);
-    });
+      // Initialize Firebase
+      const app = firebase.initializeApp(firebaseConfig);
+      const db = firebase.database();
 
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
+      // Fetch and display chat messages
+      const chatBox = document.getElementById("chat-box");
+      const userLocation = "<%= user.location %>";
 
-  // Send a new message
-  document.getElementById('sendButton').addEventListener('click', async () => {
-    const chatInput = document.getElementById('chatInput');
-    const message = chatInput.value.trim();
-
-    if (message) {
-      await fetch(`/chat/${city}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: message })
+      db.ref(`Cities/${userLocation}/Chats`).on("child_added", (snapshot) => {
+        const messageData = snapshot.val();
+        const messageElement = document.createElement("p");
+        messageElement.textContent = `${messageData.userName}: ${messageData.message}`;
+        chatBox.appendChild(messageElement);
       });
 
-      chatInput.value = '';
-      fetchMessages(); // Refresh the messages
-    }
-  });
+      // Submit chat message form via AJAX
+      document
+        .getElementById("chat-form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
 
-  // Fetch messages every 2 seconds for real-time updates
-  setInterval(fetchMessages, 2000);
+          const messageInput = document.getElementById("message-input");
+          const message = messageInput.value;
 
-  // Initial fetch
-  fetchMessages();
-</script>
+          try {
+            const response = await fetch("/chat", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ message }),
+            });
 
-<%- include("partials/footer") -%>
+            if (response.ok) {
+              messageInput.value = ""; // Clear input field on success
+            } else {
+              console.error("Error sending message:", await response.text());
+            }
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        });
+    </script>
+  </body>
+</html>
