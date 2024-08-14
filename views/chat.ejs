@@ -1,0 +1,59 @@
+<%- include("partials/header") -%>
+<link rel="stylesheet" href="/css/chat.css" />
+
+<div class="chat-container">
+  <div class="chat-header">
+    <h2>Community Chat - <%= user.location %></h2>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input">
+    <input type="text" id="chatInput" placeholder="Type your message..." />
+    <button id="sendButton">Send</button>
+  </div>
+</div>
+
+<script>
+  const city = '<%= user.location %>';
+
+  // Fetch messages when the page loads
+  async function fetchMessages() {
+    const response = await fetch(`/chat/${city}`);
+    const messages = await response.json();
+    const chatMessages = document.getElementById('chatMessages');
+    chatMessages.innerHTML = '';
+
+    messages.forEach(message => {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'chat-message';
+      messageDiv.innerHTML = `<strong>${message.sender}:</strong> ${message.text}`;
+      chatMessages.appendChild(messageDiv);
+    });
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  // Send a new message
+  document.getElementById('sendButton').addEventListener('click', async () => {
+    const chatInput = document.getElementById('chatInput');
+    const message = chatInput.value.trim();
+
+    if (message) {
+      await fetch(`/chat/${city}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: message })
+      });
+
+      chatInput.value = '';
+      fetchMessages(); // Refresh the messages
+    }
+  });
+
+  // Fetch messages every 2 seconds for real-time updates
+  setInterval(fetchMessages, 2000);
+
+  // Initial fetch
+  fetchMessages();
+</script>
+
+<%- include("partials/footer") -%>
