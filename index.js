@@ -57,15 +57,38 @@ function isAuthenticated(req, res, next) {
   }
 }
 
+// Routes
+
+// Home route
 app.get("/", (req, res) => {
   res.render("home");
 });
-app.get("/Home2", (req, res) => {
-  res.render("Home2");
+
+// Authenticated home route
+app.get("/home2", isAuthenticated, async (req, res) => {
+  const location = req.session.user.location;
+
+  try {
+    const postsSnapshot = await db.collection("Cities")
+      .doc(location)
+      .collection("UnityThread")
+      .get();
+
+    const posts = postsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+    res.render("home2", { user: req.session.user, posts });
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.status(500).send("Error fetching posts. Please try again later.");
+  }
 });
 
+// Sign up route
 app.get("/signup", (req, res) => {
   res.render("signup");
+});
+app.get("/about",(req,res)=>{
+  res.render("about",{ user: req.session.user })
 });
 
 app.post("/signupsubmit", async (req, res) => {
@@ -99,7 +122,7 @@ app.post("/signupsubmit", async (req, res) => {
       });
 
     // Redirect to signin page after successful signup
-    res.redirect("/");
+    res.redirect("/signin");
   } catch (error) {
     console.error("Error signing up:", error.message);
     res.status(500).send(`Error signing up: ${error.message}`);
@@ -146,7 +169,7 @@ app.post("/signinsubmit", async (req, res) => {
       location: location,
     };
 
-    res.redirect("/Home2");
+    res.redirect("/home2");
   } catch (error) {
     console.error("Error signing in:", error);
 
@@ -162,6 +185,8 @@ app.post("/signinsubmit", async (req, res) => {
     res.status(401).send("Unauthorized");
   }
 });
+
+
 
 app.get("/compose", isAuthenticated, (req, res) => {
   res.render("compose", { user: req.session.user.name });
@@ -226,8 +251,9 @@ app.post(
       console.error("Error posting:", error.message);
       res.status(500).send("Error posting. Please try again later.");
     }
-  }
-);
+  });
+
+
 
 app.get("/post", isAuthenticated, async (req, res) => {
   const location = req.session.user.location; // Get location from session
@@ -256,16 +282,22 @@ app.get("/post", isAuthenticated, async (req, res) => {
 
 app.get("/post/:id", isAuthenticated, async (req, res) => {
   const postId = req.params.id;
+  const location = req.session.user.location; // Get location from session
 
   try {
-    const postDoc = await db.collection("posts").doc(postId).get();
+    // Retrieve the post from the user's location
+    const postDoc = await db.collection("Cities")
+      .doc(location)
+      .collection("UnityThread")
+      .doc(postId)
+      .get();
 
     if (!postDoc.exists) {
       return res.status(404).send("Post not found");
     }
 
     const post = postDoc.data();
-    console.log("Post data:", post);
+  console.log("Post data:", post); 
     res.render("post", post);
   } catch (error) {
     console.error("Error fetching post:", error);
@@ -273,7 +305,54 @@ app.get("/post/:id", isAuthenticated, async (req, res) => {
   }
 });
 
-app.get("/signout", (req, res) => {
+// Fetch messages for a specific city
+
+app.get("/chat",isAuthenticated, (req, res) => {
+  res.render("chat", { user: req.session.user.name });
+});
+app.get("/chat/:city", isAuthenticated, async (req, res) => {
+  const city = req.params.city;
+
+  try {
+    const messagesSnapshot = await db.collection("Cities").doc(city).collection("Chat")
+      .orderBy("timestamp", "asc")
+      .get();
+
+    const messages = messagesSnapshot.docs.map(doc => doc.data());
+    res.json(messages);
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    res.status(500).send("Error fetching messages");
+  }
+});
+
+// Send a message to the chat
+app.post("/chat/:city", isAuthenticated, async (req, res) => {
+  const city = req.params.city;
+  const { text } = req.body;
+  const sender = req.session.user.name;
+
+  if (!text) {
+    return res.status(400).send("Message text is required");
+  }
+
+  try {
+    await db.collection("Cities").doc(city).collection("Chat").add({
+      sender: sender,
+      text: text,
+      timestamp: new Date(),
+    });
+
+    res.status(200).send("Message sent");
+  } catch (error) {
+    console.error("Error sending message:", error);
+    res.status(500).send("Error sending message");
+  }
+});
+
+
+// Sign out route
+app.post("/signout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       return res.status(500).send("Error signing out. Please try again later.");
@@ -282,6 +361,7 @@ app.get("/signout", (req, res) => {
   });
 });
 
+// Start the server
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
