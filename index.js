@@ -1,4 +1,3 @@
-// Required modules
 const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
@@ -9,7 +8,6 @@ const { getStorage } = require("firebase-admin/storage");
 const { getAuth } = require("firebase-admin/auth");
 const key = require("./firebase.json");
 
-// Initialize Firebase Admin SDK with storageBucket
 
 initializeApp({
   credential: cert(key),
@@ -257,6 +255,40 @@ app.get("/signout", (req, res) => {
     res.redirect("/signin");
   });
 });
+
+
+app.get("/delete/:id",isAuthenticated,async(req,res)=>{
+  const postId=req.params.id;
+  if (!postId) {
+    return res.status(400).send("Invalid post ID");
+  }
+
+  const location = req.session.user.location;
+
+  try{
+    const postRef= db.collection("Cities")
+                  .doc(location)
+                  .collection("UnityThread")
+                  .doc(postId);
+    
+    const postDoc = await postRef.get();
+    if(!postDoc.exists){
+      return res.status(404).send("Thread not Found");
+    }
+
+    await postRef.delete();
+
+    res.redirect("/post");
+  }catch(error){
+    console.log("Error deleting post:", error);
+    res.status(500).send("Error deleting post. Please try again later.");
+  }
+});
+app.get('/share/:id', (req, res) => {
+  const postId = req.params.id;
+  res.redirect('/post/' + postId);
+});
+
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
