@@ -3,12 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/chat.css" />
     <title>Chat</title>
-    <!-- Optional: Add your CSS file for styling -->
   </head>
   <body>
-    <h1>Chat Room - <%= user.location %></h1>
-    <div id="chat-box"></div>
+    <%- include("partials/header") -%>
+    <h1 class="chat-heading">
+      Welcome to City Connect -
+      <span class="chat-heading-cityName"> <%= user.location %></span>
+    </h1>
+    <div style="display: flex; justify-content: center">
+      <p class="chat-heading-description" style="font-weight: 300">
+        This is your space to
+        <span class="chat-heading-description-highlight"
+          >connect, share, and chat</span
+        >
+        with fellow residents in your city. Whether you want to discuss
+        <span class="chat-heading-description-highlight"> local events</span>,
+        ask for
+        <span class="chat-heading-description-highlight"> recommendations</span
+        >, or just have a
+        <span class="chat-heading-description-highlight"
+          >casual conversation</span
+        >, this is the place to be! Remember to
+        <span class="chat-heading-description-highlight"
+          >keep the conversation friendly</span
+        >
+        and
+        <span class="chat-heading-description-highlight"
+          >avoid sharing personal or sensitive information</span
+        >
+        to ensure a safe and enjoyable experience for everyone.
+        <span class="chat-heading-description-highlight">Happy chatting!</span>
+      </p>
+    </div>
+
+    <!-- Chat Box Container -->
+    <div id="chat-box" class="chat-box">
+      <!-- Dynamic messages will be appended here -->
+    </div>
 
     <form id="chat-form" action="/chat" method="POST">
       <input
@@ -18,7 +51,9 @@
         placeholder="Type your message..."
         required
       />
-      <button type="submit">Send</button>
+      <button type="submit" class="chat-send-message">
+        <img src="images/paper-plane-solid.svg" alt="" />
+      </button>
     </form>
 
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
@@ -47,9 +82,44 @@
 
       db.ref(`Cities/${userLocation}/Chats`).on("child_added", (snapshot) => {
         const messageData = snapshot.val();
-        const messageElement = document.createElement("p");
-        messageElement.textContent = `${messageData.userName}: ${messageData.message}`;
-        chatBox.appendChild(messageElement);
+        const timestamp = new Date(messageData.timestamp);
+        const timeString = timestamp.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        const dateString = timestamp.toLocaleDateString();
+
+        // Check if the message is sent by the current user
+        const isSentByUser = messageData.userName === "<%= user.name %>";
+
+        // Apply different classes and avatar image based on the sender
+        const messageClass = isSentByUser ? "sent" : "received";
+        const avatarClass = isSentByUser ? "avatarSent" : "avatarReceived";
+        const userClass = isSentByUser ? "sentUser" : "receivedUser";
+        const timeClass = isSentByUser ? "sentTime" : "receivedTime";
+
+        const avatarImage = isSentByUser
+          ? "images/User-profile.png"
+          : "images/Other-profile.png";
+
+        const messageHTML = `
+    <div class="message-container ${messageClass}">
+      <div class="user-info ${messageClass}">
+        <div class="avatar ${avatarClass}">
+          <img src="${avatarImage}" alt="User Avatar" />
+        </div>
+        <p class="user-name ${userClass}">${messageData.userName}</p>
+      </div>
+
+      <div class="message-content ${messageClass}">
+        <p class="message-text">${messageData.message}</p>
+        <p class="message-timestamp ${timeClass}">${timeString} | ${dateString}</p>
+      </div>
+    </div>
+  `;
+
+        chatBox.innerHTML += messageHTML;
+        chatBox.scrollTop = chatBox.scrollHeight;
       });
 
       // Submit chat message form via AJAX
