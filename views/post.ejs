@@ -52,6 +52,7 @@
           <h2 class="post-h3"><%= post.Title %></h2>
           <p class="post-p"><%- post.Content %></p>
           <!-- Ensure the key matches your Firestore field -->
+          <a href="/post/<%= post.id %>">Read More</a>
         </div>
         <div style="margin-bottom: 4vh"></div>
         
