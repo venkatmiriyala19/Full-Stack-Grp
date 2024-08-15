@@ -1,35 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>commUnity</title>
-    <link rel="stylesheet" href="css/header.css">
-</head>
-<body>
-    <nav class="container-header">
-        <div class="logo-header" id="logo-header">
-            <img src="images/commUnity-logo.png" alt="Logo"> <!-- Replace with your logo path -->
-        </div>
-        <ul class="nav-links">
-            <li><a href="/compose">Unity Threads</a></li>
-            <li><a href="/post">Posts</a></li>
-            <li><a href="/post">Compose</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/chat">Chat</a></li>
-        </ul>
-        <div class="nav-button">
-          <form action="/signout" method="POST">
-            <button type="submit" class="request-demo">Logout</button>
+    <link rel="stylesheet" href="css/header.css" />
+  </head>
+  <body>
+    <nav class="container-header" id="header">
+      <div class="logo-header" id="logo-header">
+        <img src="images/commUnity-logo.png" alt="Logo" />
+        <!-- Replace with your logo path -->
+      </div>
+      <ul class="nav-links">
+        <li><a href="/post" class="nav-link">Unity Threads</a></li>
+        <li><a href="/compose" class="nav-link">Compose</a></li>
+        <li><a href="/about" class="nav-link">About</a></li>
+        <li><a href="/chat" class="nav-link">City Connect</a></li>
+      </ul>
+      <div class="nav-button">
+        <form action="/signout" method="POST">
+          <button type="submit" class="request-demo">Logout</button>
         </form>
-        </div>
+      </div>
     </nav>
-</body>
-<script>
-  document
-    .getElementById("logo-header")
-    .addEventListener("click", function () {
-      window.location.href = "/home2";
-    });
-</script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const header = document.getElementById("header");
+        const navLinks = document.querySelectorAll(".nav-link");
+        const currentPath = window.location.pathname;
+
+        // Define the active route
+        const activeRoute = "/chat"; // Adjust this to the route where you want the header to be active
+
+        // Set header background color
+        if (currentPath === activeRoute) {
+          header.classList.add("header-active");
+          header.classList.remove("header-default");
+        } else {
+          header.classList.add("header-default");
+          header.classList.remove("header-active");
+        }
+
+        // Set link colors based on current route
+        navLinks.forEach((link) => {
+          if (link.getAttribute("href") === currentPath) {
+            link.classList.add("active");
+            link.classList.remove("inactive");
+          } else {
+            link.classList.add("inactive");
+            link.classList.remove("active");
+          }
+        });
+
+        // Handle logo click event
+        document
+          .getElementById("logo-header")
+          .addEventListener("click", function () {
+            window.location.href = "/home2";
+          });
+      });
+    </script>
+  </body>
 </html>
