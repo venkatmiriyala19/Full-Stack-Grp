@@ -1,7 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inconsolata:wght@200..900&family=Kanit&family=Play:wght@400;700&family=Poppins:wght@400;500&family=Protest+Guerrilla&family=Protest+Strike&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Sixtyfour&family=Smooch+Sans:wght@100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Dongle&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap");
 
 .nav-links a {
   text-decoration: none;
@@ -14,7 +13,7 @@
   color: #000;
 }
 
-body{
+body {
   padding: 0;
   margin: 0;
 }
@@ -27,15 +26,14 @@ body{
   padding: 10px 20px;
   border-bottom: 0.5px solid black;
   white-space: 2;
-  
 }
-.logo-header{
+.logo-header {
   cursor: pointer;
 }
 .logo-header img {
   width: 10rem;
   height: 2rem;
-  margin-left:2rem ;
+  margin-left: 2rem;
 }
 .nav-links {
   list-style-type: none;
@@ -129,4 +127,16 @@ body{
 }
 .top-pad {
   padding-top: 20px;
+}
+/* In your header.css file */
+
+.nav-links a.active {
+  color: #00adb5; /* Color for active link */
+}
+
+.nav-links a.inactive {
+  color: #393e46; /* Color for inactive links */
+}
+.nav-links a:hover {
+  color: #00adb5;
 }
