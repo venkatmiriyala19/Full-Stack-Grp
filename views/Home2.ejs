@@ -29,8 +29,8 @@
         <img src="<%= post.Image %>" alt="<%= post.Title %>" class="post-image" />
         <div class="post-content">
           <h3 class="post-title"><%= post.Title %></h3>
-          <p class="post-excerpt"><%= post.Content.substring(0, 100) %>...</p>
-          <a href="/post/<%= post.id %>" class="post-link">Read More</a>
+          <p class="span"><%= post.Category %></p>
+          <a href="/post" class="post-link">Read More</a>
         </div>
       </div>
     <% }); %>
