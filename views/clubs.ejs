@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clubs</title>
+  </head>
+  <body>
+    <h1>Clubs in <%= user.location %></h1>
+
+    <div class="clubs-container">
+      <% clubs.forEach(club => { %>
+      <div class="club-card">
+        <img
+          src="<%= club.ClubBanner %>"
+          alt="<%= club.ClubName %> Banner"
+          class="club-banner"
+        />
+        <h2><%= club.ClubName %></h2>
+        <p><strong>Location:</strong> <%= club.ClubLocation %></p>
+        <p><strong>Timings:</strong> <%= club.ClubTimings %></p>
+        <p><%= club.ClubDescription %></p>
+        <img
+          src="<%= club.ClubProfileImage %>"
+          alt="<%= club.ClubName %> Profile"
+          class="club-profile-photo"
+        />
+      </div>
+      <% }); %>
+    </div>
+  </body>
+</html>

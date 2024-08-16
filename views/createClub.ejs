@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Club</title>
+    <link rel="stylesheet" href="/path/to/your/css/styles.css" />
+  </head>
+  <body>
+    <h1>Create a New Club in <%= user.location %></h1>
+
+    <form
+      action="/clubs/createClub"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <div>
+        <label for="clubName">Club Name:</label>
+        <input type="text" id="clubName" name="clubName" required />
+      </div>
+
+      <div>
+        <label for="clubDescription">Club Description:</label>
+        <textarea
+          id="clubDescription"
+          name="clubDescription"
+          rows="5"
+          required
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="clubLocation">Club Location:</label>
+        <input type="text" id="clubLocation" name="clubLocation" required />
+      </div>
+
+      <div>
+        <label for="clubTimings">Club Timings:</label>
+        <input type="text" id="clubTimings" name="clubTimings" required />
+      </div>
+
+      <div>
+        <label for="clubBanner">Club Banner:</label>
+        <input type="file" id="clubBanner" name="clubBanner" accept="image/*" />
+      </div>
+
+      <div>
+        <label for="clubProfileImage">Club Profile Image:</label>
+        <input
+          type="file"
+          id="clubProfileImage"
+          name="clubProfileImage"
+          accept="image/*"
+          required
+        />
+      </div>
+
+      <button type="submit">Create Club</button>
+    </form>
+  </body>
+</html>

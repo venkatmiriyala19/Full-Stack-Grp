@@ -429,6 +429,95 @@ app.get("/share/:id", (req, res) => {
   res.redirect("/post/" + postId);
 });
 
+app.get("/clubs", isAuthenticated, async (req, res) => {
+  const location = req.session.user.location; // Get location from session
+
+  try {
+    // Query the clubs from the user's location
+    const clubsSnapshot = await db
+      .collection("Cities")
+      .doc(location)
+      .collection("Clubs")
+      .get();
+
+    // Map the clubs to include their ID
+    const clubs = clubsSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    // Render the clubs with the user's information
+    res.render("clubs", { clubs, user: req.session.user });
+  } catch (error) {
+    console.error("Error fetching clubs:", error);
+    res.status(500).send("Error fetching clubs. Please try again later.");
+  }
+});
+// Route to display the form for creating a new club
+app.get("/clubs/createClub", isAuthenticated, (req, res) => {
+  res.render("createClub", { user: req.session.user });
+});
+
+// Route to handle the form submission for creating a new club
+app.post(
+  "/clubs/createClub",
+  isAuthenticated,
+  upload.fields([
+    { name: "clubBanner" },
+    { name: "clubProfileImage", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    const { clubName, clubDescription, clubLocation, clubTimings } = req.body;
+    const location = req.session.user.location; // Use user's city
+
+    // Check that the club profile image is provided
+    if (!req.files || !req.files.clubProfileImage) {
+      return res.status(400).send("Club Profile Image is required.");
+    }
+
+    try {
+      const clubProfileImage = req.files.clubProfileImage[0];
+      const clubBanner = req.files.clubBanner ? req.files.clubBanner[0] : null;
+
+      // Upload club profile image
+      const profileImageRef = bucket.file(
+        `images/${Date.now()}_${clubProfileImage.originalname}`
+      );
+      await profileImageRef.save(clubProfileImage.buffer);
+      const clubProfileImageURL = `https://firebasestorage.googleapis.com/v0/b/${
+        bucket.name
+      }/o/${encodeURIComponent(profileImageRef.name)}?alt=media`;
+
+      // Upload club banner image if provided
+      let clubBannerURL = null;
+      if (clubBanner) {
+        const bannerRef = bucket.file(
+          `images/${Date.now()}_${clubBanner.originalname}`
+        );
+        await bannerRef.save(clubBanner.buffer);
+        clubBannerURL = `https://firebasestorage.googleapis.com/v0/b/${
+          bucket.name
+        }/o/${encodeURIComponent(bannerRef.name)}?alt=media`;
+      }
+
+      // Save club details to Firestore
+      await db.collection("Cities").doc(location).collection("Clubs").add({
+        ClubName: clubName,
+        ClubDescription: clubDescription,
+        ClubLocation: clubLocation,
+        ClubTimings: clubTimings,
+        ClubBanner: clubBannerURL,
+        ClubProfileImage: clubProfileImageURL,
+      });
+
+      res.redirect("/clubs");
+    } catch (error) {
+      console.error("Error creating club:", error);
+      res.status(500).send("Error creating club. Please try again later.");
+    }
+  }
+);
+
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
