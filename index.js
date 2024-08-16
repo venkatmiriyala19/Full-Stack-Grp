@@ -14,7 +14,6 @@ const key = require("./firebase.json");
 const admin = require("firebase-admin");
 const { getDatabase } = require("firebase-admin/database"); // Import for Realtime Database
 
-
 initializeApp({
   credential: cert(key),
   storageBucket: "node401app.appspot.com",
@@ -309,10 +308,13 @@ app.get("/post/:id", isAuthenticated, async (req, res) => {
       .get();
     const formattedTime = post.Time.toDate().toLocaleString();
 
-
     const voices = voicesSnapshot.docs.map((doc) => doc.data());
 
-    res.render("postpage", { post: { id: postId, ...post ,Time: formattedTime}, voices, user: req.session.user });
+    res.render("postpage", {
+      post: { id: postId, ...post, Time: formattedTime },
+      voices,
+      user: req.session.user,
+    });
   } catch (error) {
     console.error("Error fetching post:", error);
     res.status(500).send("Error fetching post. Please try again later.");
@@ -356,8 +358,6 @@ app.post("/post/:id/NeighbourVoices", isAuthenticated, async (req, res) => {
   }
 });
 
-
-
 app.get("/chat", isAuthenticated, (req, res) => {
   res.render("chat", { user: req.session.user });
 });
@@ -396,39 +396,38 @@ app.post("/signout", (req, res) => {
   });
 });
 
-
-app.get("/delete/:id",isAuthenticated,async(req,res)=>{
-  const postId=req.params.id;
+app.get("/delete/:id", isAuthenticated, async (req, res) => {
+  const postId = req.params.id;
   if (!postId) {
     return res.status(400).send("Invalid post ID");
   }
 
   const location = req.session.user.location;
 
-  try{
-    const postRef= db.collection("Cities")
-                  .doc(location)
-                  .collection("UnityThread")
-                  .doc(postId);
-    
+  try {
+    const postRef = db
+      .collection("Cities")
+      .doc(location)
+      .collection("UnityThread")
+      .doc(postId);
+
     const postDoc = await postRef.get();
-    if(!postDoc.exists){
+    if (!postDoc.exists) {
       return res.status(404).send("Thread not Found");
     }
 
     await postRef.delete();
 
     res.redirect("/post");
-  }catch(error){
+  } catch (error) {
     console.log("Error deleting post:", error);
     res.status(500).send("Error deleting post. Please try again later.");
   }
 });
-app.get('/share/:id', (req, res) => {
+app.get("/share/:id", (req, res) => {
   const postId = req.params.id;
-  res.redirect('/post/' + postId);
+  res.redirect("/post/" + postId);
 });
-
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
