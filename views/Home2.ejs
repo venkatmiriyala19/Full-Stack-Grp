@@ -19,23 +19,51 @@
   </div>
 </div>
 
-<!-- Horizontal Scrollable Post Cards Section -->
-<!-- Horizontal Scrollable Post Cards Section -->
-<div class="post-container">
-  <h2 class="section-title">Latest Unity Threads</h2>
-  <div class="post-scroll">
+
+
+<div class="post-container-home">
+  <h2 class="section-title-home">Latest Unity Threads of your Locality</h2>
+  <div class="post-scroll-home">
     <% posts.forEach(function(post) { %>
-      <div class="post-card">
-        <img src="<%= post.Image %>" alt="<%= post.Title %>" class="post-image" />
-        <div class="post-content">
-          <h3 class="post-title"><%= post.Title %></h3>
+      <div class="post-card-home">
+        <img src="<%= post.Image %>" alt="<%= post.Title %>" class="post-image-home" />
+        <div class="post-content-home">
+          <h3 class="post-title-home"><%= post.Title %></h3>
           <p class="span"><%= post.Category %></p>
-          <a href="/post" class="post-link">Read More</a>
+          <a href="/post" class="post-link-home">Read More</a>
         </div>
       </div>
     <% }); %>
   </div>
 </div>
+
+<div class="section-4-title"><h2>Connect with your Locality</h2></div>
+<div class="fourth-section" id="section4">
+  <div class="right-container">
+    <h1 class="general-discussions-h1">
+      Participate in
+      <span style="color: #fff"><br />General Discussions </span><br />
+      of your community.
+    </h1>
+  </div>
+  <div id="left-container">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.1/lottie.min.js"></script>
+    <script>
+      lottie.loadAnimation({
+        container: document.getElementById("left-container"),
+        renderer: "svg",
+        loop: true,
+        autoplay: true,
+        path: "images/Group-Discussion.json",
+      });
+    </script>
+    <h2 class="connect-home"><a href="/chat">Lets Connect</a></h2>
+  </div>
+  
+</div>
+<!-- Horizontal Scrollable Post Cards Section -->
+<!-- Horizontal Scrollable Post Cards Section -->
+
 
 
 
