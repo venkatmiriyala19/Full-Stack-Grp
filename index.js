@@ -14,7 +14,6 @@ const key = require("./firebase.json");
 const admin = require("firebase-admin");
 const { getDatabase } = require("firebase-admin/database"); // Import for Realtime Database
 
-
 initializeApp({
   credential: cert(key),
   storageBucket: "node401app.appspot.com",
@@ -101,12 +100,8 @@ app.post("/signupsubmit", async (req, res) => {
   const uname = req.body.uname;
   const email = req.body.email;
   const password = req.body.password;
-  const locationInput = req.body.location;
+  const location = req.body.location;
   const cpass = req.body.cpass;
-
-  // Sanitize and normalize the location input
-  const location = locationInput.trim();  // Remove any leading/trailing whitespace
-  const cleanedLocation = location.normalize('NFKC');  // Normalize to avoid special characters
 
   if (password !== cpass) {
     return res.status(400).send("Passwords do not match");
@@ -121,15 +116,14 @@ app.post("/signupsubmit", async (req, res) => {
 
     await db
       .collection("Cities")
-      .doc(cleanedLocation)  // Use the cleaned location
+      .doc(location)
       .collection("Residents")
       .doc(userRecord.uid)
       .set({
         UserName: uname,
         Email: email,
-        Location: cleanedLocation,  // Store the cleaned location
+        Location: location,
         Image: null,
-        initialized: true, 
       });
 
     // Redirect to signin page after successful signup
@@ -146,55 +140,33 @@ app.get("/signin", (req, res) => {
 
 app.post("/signinsubmit", async (req, res) => {
   const email = req.body.email;
+  const password = req.body.password;
 
   try {
-    // Authenticate the user via Firebase Authentication
+    // Check if the user exists in Firebase Authentication
     const userRecord = await auth.getUserByEmail(email);
     const uid = userRecord.uid;
 
-    // Fetch all city documents
     const citiesSnapshot = await db.collection("Cities").get();
-    
-    if (citiesSnapshot.empty) {
-      console.log("No cities found in the database.");
-      return res.status(400).send("No cities found.");
-    }
 
     let location = null;
-
     for (const cityDoc of citiesSnapshot.docs) {
-      try {
-        let cityName = cityDoc.id.trim(); // Trim any whitespace
-
-        console.log(`Checking city: ${cityName}`); // Log the city being checked
-
-        const residentDocRef = cityDoc.ref.collection("Residents").doc(uid);
-        const residentDoc = await residentDocRef.get();
-
-        if (residentDoc.exists) {
-          const residentData = residentDoc.data();
-          
-          if (residentData.initialized) { // Check if the user data is initialized
-            location = cityName;
-            console.log(`Found user in city: ${location}`); // Log when the user is found
-            break;
-          } else {
-            console.log(`User data not initialized in city: ${cityName}`);
-          }
-        } else {
-          console.log(`User not found in city: ${cityName}`); // Log if not found
-        }
-      } catch (err) {
-        console.error(`Error checking city ${cityDoc.id}:`, err.message);
+      const residentDoc = await cityDoc.ref
+        .collection("Residents")
+        .doc(uid)
+        .get();
+      if (residentDoc.exists) {
+        location = cityDoc.id; // The city name is the document ID
+        break;
       }
     }
 
     if (!location) {
-      console.log("User not found in any city or data not initialized.");
-      return res.status(400).send("You are not a registered user in any city or your data is not initialized.");
+      // If the user is not found in any city, inform them about the issue
+      return res.status(400).send("You are not a registered user in any city.");
     }
 
-    // Create a session and redirect to home2
+    // If the user exists in both Authentication and Firestore, create a session and redirect to home
     req.session.user = {
       uid: userRecord.uid,
       name: userRecord.displayName,
@@ -206,17 +178,18 @@ app.post("/signinsubmit", async (req, res) => {
   } catch (error) {
     console.error("Error signing in:", error);
 
-    // Handle Firebase Authentication errors
+    // Handle specific Firebase Authentication errors
     if (error.code === "auth/user-not-found") {
-      return res.status(400).send("User not found.");
+      return res
+        .status(400)
+        .send(
+          "Either your location is incorrect, or you are not a registered user."
+        );
     }
 
     res.status(401).send("Unauthorized");
   }
 });
-
-
-
 
 app.get("/compose", isAuthenticated, (req, res) => {
   res.render("compose", { user: req.session.user.name });
@@ -309,15 +282,14 @@ app.get("/post", isAuthenticated, async (req, res) => {
   }
 });
 
+// Route to render a specific post
 app.get("/post/:id", isAuthenticated, async (req, res) => {
   const postId = req.params.id;
-  const location = req.session.user.location; // Get location from session
-
+  console.log("Fetching post with ID:", postId); // Debugging line
   try {
-    // Retrieve the post from the user's location
     const postDoc = await db
       .collection("Cities")
-      .doc(location)
+      .doc(req.session.user.location)
       .collection("UnityThread")
       .doc(postId)
       .get();
@@ -327,11 +299,62 @@ app.get("/post/:id", isAuthenticated, async (req, res) => {
     }
 
     const post = postDoc.data();
-    console.log("Post data:", post);
-    res.render("post", post);
+    const voicesSnapshot = await db
+      .collection("Cities")
+      .doc(req.session.user.location)
+      .collection("UnityThread")
+      .doc(postId)
+      .collection("NeighbourVoices")
+      .get();
+    const formattedTime = post.Time.toDate().toLocaleString();
+
+    const voices = voicesSnapshot.docs.map((doc) => doc.data());
+
+    res.render("postpage", {
+      post: { id: postId, ...post, Time: formattedTime },
+      voices,
+      user: req.session.user,
+    });
   } catch (error) {
     console.error("Error fetching post:", error);
     res.status(500).send("Error fetching post. Please try again later.");
+  }
+});
+
+// Route to handle adding a new comment (voice) to a post
+app.post("/post/:id/NeighbourVoices", isAuthenticated, async (req, res) => {
+  const postId = req.params.id;
+  const location = req.session.user.location;
+  const userId = req.session.user.uid;
+  const userName = req.session.user.name;
+  const voice = req.body.voice;
+
+  if (!voice || voice.trim() === "") {
+    return res.status(400).send("Voice cannot be empty");
+  }
+
+  try {
+    // Reference to the specific post's NeighbourVoices collection
+    const voicesRef = db
+      .collection("Cities")
+      .doc(location)
+      .collection("UnityThread")
+      .doc(postId)
+      .collection("NeighbourVoices");
+
+    // Add the new comment (voice) to the collection
+    await voicesRef.add({
+      AuthorId: userId,
+      AuthorName: userName,
+      Voice: voice,
+      Timestamp: new Date(),
+    });
+
+    // Redirect back to the post page
+    res.redirect(`/post/${postId}`);
+  } catch (error) {
+    console.error("Error adding comment:", error.message);
+    res.status(500).send("Error adding comment. Please try again later.");
   }
 });
 
@@ -373,39 +396,38 @@ app.post("/signout", (req, res) => {
   });
 });
 
-
-app.get("/delete/:id",isAuthenticated,async(req,res)=>{
-  const postId=req.params.id;
+app.get("/delete/:id", isAuthenticated, async (req, res) => {
+  const postId = req.params.id;
   if (!postId) {
     return res.status(400).send("Invalid post ID");
   }
 
   const location = req.session.user.location;
 
-  try{
-    const postRef= db.collection("Cities")
-                  .doc(location)
-                  .collection("UnityThread")
-                  .doc(postId);
-    
+  try {
+    const postRef = db
+      .collection("Cities")
+      .doc(location)
+      .collection("UnityThread")
+      .doc(postId);
+
     const postDoc = await postRef.get();
-    if(!postDoc.exists){
+    if (!postDoc.exists) {
       return res.status(404).send("Thread not Found");
     }
 
     await postRef.delete();
 
     res.redirect("/post");
-  }catch(error){
+  } catch (error) {
     console.log("Error deleting post:", error);
     res.status(500).send("Error deleting post. Please try again later.");
   }
 });
-app.get('/share/:id', (req, res) => {
+app.get("/share/:id", (req, res) => {
   const postId = req.params.id;
-  res.redirect('/post/' + postId);
+  res.redirect("/post/" + postId);
 });
-
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
