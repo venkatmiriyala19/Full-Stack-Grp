@@ -309,14 +309,15 @@ app.get("/post", isAuthenticated, async (req, res) => {
   }
 });
 
-// Route to render a specific post
 app.get("/post/:id", isAuthenticated, async (req, res) => {
   const postId = req.params.id;
-  console.log("Fetching post with ID:", postId); // Debugging line
+  const location = req.session.user.location; // Get location from session
+
   try {
+    // Retrieve the post from the user's location
     const postDoc = await db
       .collection("Cities")
-      .doc(req.session.user.location)
+      .doc(location)
       .collection("UnityThread")
       .doc(postId)
       .get();
@@ -326,63 +327,13 @@ app.get("/post/:id", isAuthenticated, async (req, res) => {
     }
 
     const post = postDoc.data();
-    const voicesSnapshot = await db
-      .collection("Cities")
-      .doc(req.session.user.location)
-      .collection("UnityThread")
-      .doc(postId)
-      .collection("NeighbourVoices")
-      .get();
-    const formattedTime = post.Time.toDate().toLocaleString();
-
-
-    const voices = voicesSnapshot.docs.map((doc) => doc.data());
-
-    res.render("postpage", { post: { id: postId, ...post ,Time: formattedTime}, voices, user: req.session.user });
+    console.log("Post data:", post);
+    res.render("post", post);
   } catch (error) {
     console.error("Error fetching post:", error);
     res.status(500).send("Error fetching post. Please try again later.");
   }
 });
-
-// Route to handle adding a new comment (voice) to a post
-app.post("/post/:id/NeighbourVoices", isAuthenticated, async (req, res) => {
-  const postId = req.params.id;
-  const location = req.session.user.location;
-  const userId = req.session.user.uid;
-  const userName = req.session.user.name;
-  const voice = req.body.voice;
-
-  if (!voice || voice.trim() === "") {
-    return res.status(400).send("Voice cannot be empty");
-  }
-
-  try {
-    // Reference to the specific post's NeighbourVoices collection
-    const voicesRef = db
-      .collection("Cities")
-      .doc(location)
-      .collection("UnityThread")
-      .doc(postId)
-      .collection("NeighbourVoices");
-
-    // Add the new comment (voice) to the collection
-    await voicesRef.add({
-      AuthorId: userId,
-      AuthorName: userName,
-      Voice: voice,
-      Timestamp: new Date(),
-    });
-
-    // Redirect back to the post page
-    res.redirect(`/post/${postId}`);
-  } catch (error) {
-    console.error("Error adding comment:", error.message);
-    res.status(500).send("Error adding comment. Please try again later.");
-  }
-});
-
-
 
 app.get("/chat", isAuthenticated, (req, res) => {
   res.render("chat", { user: req.session.user });
