@@ -459,6 +459,7 @@ app.get("/clubs/createClub", isAuthenticated, (req, res) => {
 });
 
 // Route to handle the form submission for creating a new club
+// Route to handle the form submission for creating a new club
 app.post(
   "/clubs/createClub",
   isAuthenticated,
@@ -508,6 +509,7 @@ app.post(
         ClubTimings: clubTimings,
         ClubBanner: clubBannerURL,
         ClubProfileImage: clubProfileImageURL,
+        MembersCount: 1, // Initialize with 1 as the creator is considered a member
       });
 
       res.redirect("/clubs");
@@ -517,6 +519,7 @@ app.post(
     }
   }
 );
+
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
