@@ -453,6 +453,37 @@ app.get("/clubs", isAuthenticated, async (req, res) => {
     res.status(500).send("Error fetching clubs. Please try again later.");
   }
 });
+
+// Route to display details of a specific club
+app.get("/clubs/:id", isAuthenticated, async (req, res) => {
+  const clubId = req.params.id;
+  const location = req.session.user.location; // Get location from session
+
+  try {
+    // Query the specific club by its ID
+    const clubDoc = await db
+      .collection("Cities")
+      .doc(location)
+      .collection("Clubs")
+      .doc(clubId)
+      .get();
+
+    if (!clubDoc.exists) {
+      return res.status(404).send("Club not found");
+    }
+
+    const club = clubDoc.data();
+
+    // Render the club details page
+    res.render("clubDetails", { club, user: req.session.user });
+  } catch (error) {
+    console.error("Error fetching club details:", error);
+    res
+      .status(500)
+      .send("Error fetching club details. Please try again later.");
+  }
+});
+
 // Route to display the form for creating a new club
 app.get("/clubs/createClub", isAuthenticated, (req, res) => {
   res.render("createClub", { user: req.session.user });
