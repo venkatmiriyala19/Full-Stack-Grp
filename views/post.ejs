@@ -31,7 +31,7 @@
           </div>
           <% if (user && user.uid === post.AuthorId) { %>
           <div class="dropdown">
-            <button class="dropbtn">⋮</button>
+            <button class="dropbtn"><img src="/images/threedots.png" style="width:1.2rem; height:1.2rem"></button>
             <div class="dropdown-content">
               <a href="/edit/<%= post.id %>">
                  Edit
@@ -52,7 +52,12 @@
           <h2 class="post-h3"><%= post.Title %></h2>
           <p class="post-p"><%- post.Content %></p>
           <!-- Ensure the key matches your Firestore field -->
-          <a href="/post/<%= post.id %>">Read More</a>
+          <button class="Read-more" onclick="goToPost('<%= post.id %>')">
+            <span class="circle" aria-hidden="true">
+              <span class="icon arrow"></span>
+            </span>
+            <span class="button-text">Read More</span>
+          </button>
         </div>
         <div style="margin-bottom: 4vh"></div>
         
@@ -64,39 +69,34 @@
       document.addEventListener('click', function(event) {
         const dropdowns = document.querySelectorAll('.dropdown-content');
         dropdowns.forEach(dropdown => {
-          if (!event.target.matches('.dropbtn')) {
+          if (!event.target.closest('.dropdown')) {
             dropdown.style.display = 'none';
           }
         });
-      
-        if (event.target.matches('.dropbtn')) {
-          const dropdownContent = event.target.nextElementSibling;
+    
+        if (event.target.closest('.dropbtn')) {
+          const dropdownContent = event.target.closest('.dropdown').querySelector('.dropdown-content');
           dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
         }
       });
+    
       function copyClipboard(postId) {
         // Construct the full URL to be shared
         var fullUrl = window.location.origin + "/post/" + postId;
-      
-        // Create a temporary input element to hold the URL
-        var tempInput = document.createElement("input");
-        tempInput.value = fullUrl;
-      
-        // Append the temporary input to the body, select the text, and copy it
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        tempInput.setSelectionRange(0, 99999); // For mobile devices
-        navigator.clipboard.writeText(tempInput.value);
-      
-        // Remove the temporary input from the body
-        document.body.removeChild(tempInput);
-      
-        // Optional: Alert the user that the link was copied
-        alert("Post URL copied to clipboard!");
+    
+        // Use navigator.clipboard for copying (simpler)
+        navigator.clipboard.writeText(fullUrl).then(function() {
+          alert("Post URL copied to clipboard!");
+        }).catch(function(error) {
+          console.error("Failed to copy URL: ", error);
+        });
+    
         return false; // Prevent the default link action
       }
       
-      
+      function goToPost(postId) {
+        window.location.href = `/post/${postId}`;
+      }
       
     </script>
     <%- include("partials/footer") -%>
