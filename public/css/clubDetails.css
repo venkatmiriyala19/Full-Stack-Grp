@@ -232,3 +232,22 @@
   background-color: #393e46; /* Light grey on hover */
   transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
 }
+.clubDetails-joined-button {
+  display: inline-block;
+  transition: all 0.2s ease-in;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  color: #222831;
+  padding: 0.7em 1.7em;
+  cursor: not-allowed;
+  font-size: 18px;
+  border-radius: 0.5em;
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  font-weight: 500 !important;
+  font-family: "Poppins", system-ui;
+  font-style: normal;
+  margin-bottom: 4vh;
+  box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+}

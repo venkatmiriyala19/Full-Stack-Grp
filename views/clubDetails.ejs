@@ -1,4 +1,3 @@
-<!-- views/clubDetails.ejs -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -28,7 +27,17 @@
       <h1><%= club.ClubName %></h1>
 
       <div class="clubDetails-join-container">
-        <button type="submit" class="clubDetails-join-button">Join Now</button>
+        <% if (hasJoined) { %>
+        <button type="button" class="clubDetails-joined-button" disabled>
+          Joined
+        </button>
+        <% } else { %>
+        <form action="/clubs/join/<%= club.id %>" method="post">
+          <button type="submit" class="clubDetails-join-button">
+            Join Club
+          </button>
+        </form>
+        <% } %>
       </div>
 
       <hr
