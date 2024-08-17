@@ -546,7 +546,6 @@ app.get("/clubs/createClub", isAuthenticated, (req, res) => {
 });
 
 // Route to handle the form submission for creating a new club
-// Route to handle the form submission for creating a new club
 app.post(
   "/clubs/createClub",
   isAuthenticated,
@@ -596,7 +595,6 @@ app.post(
         ClubTimings: clubTimings,
         ClubBanner: clubBannerURL,
         ClubProfileImage: clubProfileImageURL,
-        MembersCount: 1, // Initialize with 1 as the creator is considered a member
       });
 
       res.redirect("/clubs");
@@ -625,8 +623,7 @@ app.get("/clubs/:id/chat", isAuthenticated, async (req, res) => {
       return res.status(404).send("Club not found");
     }
 
-    const club = clubDoc.data();
-
+    const club = { id: clubDoc.id, ...clubDoc.data() };
     // Fetch chat messages
     const messagesSnapshot = await rtdb
       .ref(`Cities/${location}/Clubs/${clubId}/Chat`)
