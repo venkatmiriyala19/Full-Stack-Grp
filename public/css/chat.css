@@ -127,7 +127,8 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding-bottom: 2vh; /* Ensures the form is above other content */
+  padding-bottom: 2vh;
+  background-color: #fff;
 }
 
 #chat-form input {

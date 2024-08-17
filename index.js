@@ -522,6 +522,17 @@ app.post("/clubs/join/:id", isAuthenticated, async (req, res) => {
       joinedAt: new Date(),
     });
 
+    // Increment the MembersCount in the club document
+    const clubRef = db
+      .collection("Cities")
+      .doc(location)
+      .collection("Clubs")
+      .doc(clubId);
+
+    await clubRef.update({
+      MembersCount: admin.firestore.FieldValue.increment(1),
+    });
+
     res.redirect(`/clubs/${clubId}`); // Redirect back to the club details page
   } catch (error) {
     console.error("Error joining club:", error);
@@ -593,6 +604,80 @@ app.post(
     }
   }
 );
+
+// Route to render club chat page
+app.get("/clubs/:id/chat", isAuthenticated, async (req, res) => {
+  const clubId = req.params.id;
+  const location = req.session.user.location;
+
+  try {
+    // Fetch club details
+    const clubDoc = await db
+      .collection("Cities")
+      .doc(location)
+      .collection("Clubs")
+      .doc(clubId)
+      .get();
+
+    if (!clubDoc.exists) {
+      return res.status(404).send("Club not found");
+    }
+
+    const club = clubDoc.data();
+
+    // Fetch chat messages
+    const messagesSnapshot = await rtdb
+      .ref(`Cities/${location}/Clubs/${clubId}/Chat`)
+      .once("value");
+    const messages = messagesSnapshot.val() || {};
+
+    // Convert messages object to array and sort by timestamp
+    const sortedMessages = Object.entries(messages)
+      .map(([id, message]) => ({
+        id,
+        ...message,
+      }))
+      .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    // Render the club chat page with messages
+    res.render("clubChat", {
+      club,
+      user: req.session.user,
+      messages: sortedMessages,
+    });
+  } catch (error) {
+    console.error("Error fetching club details:", error);
+    res
+      .status(500)
+      .send("Error fetching club details. Please try again later.");
+  }
+});
+
+// Route to handle sending a message in the club chat
+app.post("/clubs/:id/chat", isAuthenticated, async (req, res) => {
+  const clubId = req.params.id;
+  const location = req.session.user.location;
+  const userName = req.session.user.name;
+  const message = req.body.message;
+
+  if (!message || message.trim() === "") {
+    return res.status(400).send("Message cannot be empty");
+  }
+
+  try {
+    const chatRef = rtdb.ref(`Cities/${location}/Clubs/${clubId}/Chat`);
+    await chatRef.push({
+      userName: userName,
+      message: message,
+      timestamp: new Date().toISOString(),
+    });
+
+    res.status(200).send("Message sent successfully");
+  } catch (error) {
+    console.error("Error sending message:", error.message);
+    res.status(500).send("Error sending message. Please try again later.");
+  }
+});
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);

@@ -11,8 +11,9 @@
     <%- include("partials/header.ejs") -%> <% if (club.ClubBanner) { %>
     <div class="clubDetails-banner">
       <img src="<%= club.ClubBanner %>" alt="Club Banner" width="400" />
-      <% } %>
     </div>
+    <% } %>
+
     <div class="clubDetails-profile-photo">
       <% if (club.ClubProfileImage) { %>
       <img
@@ -20,11 +21,24 @@
         alt="Club Profile Image"
         width="200"
       />
-
       <% } %>
     </div>
+
     <div class="clubDetails-content">
       <h1><%= club.ClubName %></h1>
+
+      <div class="clubDetails-member-count">
+        <% if (club.MembersCount && club.MembersCount > 0) { %>
+        <p style="margin-left: 0">
+          <span style="color: #00adb5; font-size: 3vh; font-weight: 600">
+            <%= club.MembersCount %>
+          </span>
+          Members
+        </p>
+        <% } else { %>
+        <p>No members yet.</p>
+        <% } %>
+      </div>
 
       <div class="clubDetails-join-container">
         <% if (hasJoined) { %>
@@ -55,6 +69,7 @@
         club.ClubDescription %>
       </p>
     </div>
+
     <div
       style="
         display: flex;
@@ -69,10 +84,24 @@
           members?
         </h1>
         <div class="clubDetails-join-container">
-          <button class="clubDetails-chat-button">Chat Now</button>
+          <% if (hasJoined) { %>
+          <a href="/clubs/<%= club.id %>/chat">
+            <button class="clubDetails-chat-button">Chat Now</button>
+          </a>
+
+          <% } else { %>
+          <button
+            class="clubDetails-chat-button"
+            disabled
+            title="Join the club to enable chat"
+          >
+            Chat Now
+          </button>
+          <% } %>
         </div>
       </div>
     </div>
+
     <%- include("partials/footer.ejs") -%>
   </body>
 </html>
