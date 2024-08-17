@@ -541,13 +541,13 @@ app.post("/clubs/join/:id", isAuthenticated, async (req, res) => {
 });
 
 // Route to display the form for creating a new club
-app.get("/clubs/createClub", isAuthenticated, (req, res) => {
+app.get("/createClub", isAuthenticated, (req, res) => {
   res.render("createClub", { user: req.session.user });
 });
 
 // Route to handle the form submission for creating a new club
 app.post(
-  "/clubs/createClub",
+  "/createClub",
   isAuthenticated,
   upload.fields([
     { name: "clubBanner" },
