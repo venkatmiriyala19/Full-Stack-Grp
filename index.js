@@ -285,7 +285,6 @@ app.get("/post", isAuthenticated, async (req, res) => {
 // Route to render a specific post
 app.get("/post/:id", isAuthenticated, async (req, res) => {
   const postId = req.params.id;
-  console.log("Fetching post with ID:", postId); // Debugging line
   try {
     const postDoc = await db
       .collection("Cities")
@@ -679,5 +678,5 @@ app.post("/clubs/:id/chat", isAuthenticated, async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
+  console.log(`App listening on port http://localhost:${port}/`);
 });
