@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/chat.css" />
+    <base href="/" />
+    <title>Club Chat</title>
+  </head>
+  <body>
+    <%- include("partials/header") -%>
+    <h1 class="chat-heading">
+      Welcome to Club Connect -
+      <span class="chat-heading-cityName"> <%= club.ClubName %></span>
+    </h1>
+    <div style="display: flex; justify-content: center">
+      <p class="chat-heading-description" style="font-weight: 300">
+        This is your space to
+        <span class="chat-heading-description-highlight"
+          >connect, share, and chat</span
+        >
+        with fellow club members. Whether you want to discuss
+        <span class="chat-heading-description-highlight"> club events</span>,
+        ask for
+        <span class="chat-heading-description-highlight"> recommendations</span
+        >, or just have a
+        <span class="chat-heading-description-highlight"
+          >casual conversation</span
+        >, this is the place to be! Remember to
+        <span class="chat-heading-description-highlight"
+          >keep the conversation friendly</span
+        >
+        and
+        <span class="chat-heading-description-highlight"
+          >avoid sharing personal or sensitive information</span
+        >
+        to ensure a safe and enjoyable experience for everyone.
+        <span class="chat-heading-description-highlight">Happy chatting!</span>
+      </p>
+    </div>
+
+    <!-- Chat Box Container -->
+    <div id="chat-box" class="chat-box" style="margin-bottom: 15vh">
+      <!-- Dynamic messages will be appended here -->
+    </div>
+    <form id="chat-form" action="/clubs/<%= club.id %>/chat" method="POST">
+      <input
+        type="text"
+        name="message"
+        id="message-input"
+        placeholder="Type your message..."
+        required
+      />
+      <button type="submit" class="chat-send-message">
+        <img src="images/paper-plane-solid.svg" alt="" />
+      </button>
+    </form>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDINlS7PqxjzKuarFE5Rr7_jQ84DLwjCOM",
+        authDomain: "node401app.firebaseapp.com",
+        databaseURL: "https://node401app-default-rtdb.firebaseio.com",
+        projectId: "node401app",
+        storageBucket: "node401app.appspot.com",
+        messagingSenderId: "166278817365",
+        appId: "1:166278817365:web:4585d2858221e5bc2a96dc",
+        measurementId: "G-JWX0GWT5T3",
+      };
+
+      // Initialize Firebase
+      const app = firebase.initializeApp(firebaseConfig);
+      const db = firebase.database();
+
+      // Fetch and display chat messages
+      const chatBox = document.getElementById("chat-box");
+      const clubId = "<%= club.id %>";
+      const userLocation = "<%= user.location %>"; // Renamed from `location` to `userLocation`
+
+      db.ref(`Cities/${userLocation}/Clubs/${clubId}/Chat`).on(
+        "child_added",
+        (snapshot) => {
+          const messageData = snapshot.val();
+          const timestamp = new Date(messageData.timestamp);
+          const timeString = timestamp.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+          const dateString = timestamp.toLocaleDateString();
+
+          // Check if the message is sent by the current user
+          const isSentByUser = messageData.userName === "<%= user.name %>";
+
+          // Apply different classes and avatar image based on the sender
+          const messageClass = isSentByUser ? "sent" : "received";
+          const avatarClass = isSentByUser ? "avatarSent" : "avatarReceived";
+          const userClass = isSentByUser ? "sentUser" : "receivedUser";
+          const timeClass = isSentByUser ? "sentTime" : "receivedTime";
+
+          const avatarImage = isSentByUser
+            ? "images/User-profile.png"
+            : "images/Other-profile.png";
+
+          const messageHTML = `
+    <div class="message-container ${messageClass}">
+      <div class="user-info ${messageClass}">
+        <div class="avatar ${avatarClass}">
+          <img src="${avatarImage}" alt="User Avatar" />
+        </div>
+        <p class="user-name ${userClass}">${messageData.userName}</p>
+      </div>
+
+      <div class="message-content ${messageClass}">
+        <p class="message-text">${messageData.message}</p>
+        <p class="message-timestamp ${timeClass}">${timeString} | ${dateString}</p>
+      </div>
+    </div>
+  `;
+
+          chatBox.innerHTML += messageHTML;
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }
+      );
+
+      // Submit chat message form via AJAX
+      document
+        .getElementById("chat-form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const messageInput = document.getElementById("message-input");
+          const message = messageInput.value;
+
+          try {
+            const response = await fetch(`/clubs/${clubId}/chat`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ message }),
+            });
+
+            if (response.ok) {
+              messageInput.value = ""; // Clear input field on success
+            } else {
+              console.error("Error sending message:", await response.text());
+            }
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        });
+    </script>
+  </body>
+</html>
