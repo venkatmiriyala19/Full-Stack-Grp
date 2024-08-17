@@ -62,9 +62,11 @@
             <%= club.ClubDescription %>
           </p>
           <div style="display: flex; justify-content: center">
-            <button class="clubs-more-button">
-              Click here for more details!
-            </button>
+            <a href="/clubs/<%= club.id %>">
+              <button class="clubs-more-button">
+                Click here for more details!
+              </button></a
+            >
           </div>
         </div>
       </div>
