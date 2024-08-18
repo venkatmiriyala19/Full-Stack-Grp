@@ -393,12 +393,15 @@ app.post("/chat", authenticateToken, async (req, res) => {
 
 // Sign out route
 app.post("/signout", (req, res) => {
-  req.destroy((err) => {
-    if (err) {
-      return res.status(500).send("Error signing out. Please try again later.");
-    }
-    res.redirect("/signin");
+  // Clear the auth token cookie
+  res.cookie("auth-token", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // Set to true if using HTTPS
+    expires: new Date(0) // Set expiration to the past
   });
+
+  // Redirect to sign-in page
+  res.redirect("/signin");
 });
 
 app.get("/delete/:id", authenticateToken, async (req, res) => {
