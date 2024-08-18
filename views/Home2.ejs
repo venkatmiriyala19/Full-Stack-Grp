@@ -1,6 +1,10 @@
 <%- include("partials/header") -%>
 <link rel="stylesheet" href="css/home2.css" />
-
+<style>
+  body {
+    overflow: hidden;
+  }
+</style>
 <div id="vanta">
   <!-- First Sectiom -->
 
@@ -11,15 +15,15 @@
       class="first-section-logo"
     />
     <h1 class="first-section-tagline">
-      Build a stronger community,<span style="color: #00adb5"
-        >together.</span
-      >
+      Build a stronger community,<span style="color: #00adb5">together.</span>
     </h1>
-    <button class="button" id="getStartedButton">Create your Unity Thread</button>
+    <button class="button" id="getStartedButton">
+      Create your Unity Thread
+    </button>
   </div>
 </div>
 
-
+<!-- 
 
 <div class="post-container-home">
   <h2 class="section-title-home">Latest Unity Threads of your Locality</h2>
@@ -60,34 +64,26 @@
     <h2 class="connect-home"><a href="/chat">Lets Connect</a></h2>
   </div>
   
-</div>
-<!-- Horizontal Scrollable Post Cards Section -->
-<!-- Horizontal Scrollable Post Cards Section -->
+</div> -->
 
-
-
-
-  <script>
-    document
-      .getElementById("getStartedButton")
-      .addEventListener("click", function () {
-        window.location.href = "/compose";
-      });
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.clouds.min.js"></script>
-  <script type="text/javascript">
-    VANTA.CLOUDS({
-      el: "#vanta",
-      mouseControls: true,
-      touchControls: true,
-      gyroControls: false,
-      minHeight: 200.0,
-      minWidth: 200.0,
+<script>
+  document
+    .getElementById("getStartedButton")
+    .addEventListener("click", function () {
+      window.location.href = "/compose";
     });
-  </script>
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.clouds.min.js"></script>
+<script type="text/javascript">
+  VANTA.CLOUDS({
+    el: "#vanta",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.0,
+    minWidth: 200.0,
+  });
+</script>
 
-
-
-
-<%- include("partials/footer") -%>
+<!-- <%- include("partials/footer") -%> -->
