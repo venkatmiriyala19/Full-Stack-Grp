@@ -1,34 +1,42 @@
+require("dotenv").config(); // Add this line to load .env variables
 const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const multer = require("multer");
 const { initializeApp, cert } = require("firebase-admin/app");
-const {
-  getFirestore,
-  Timestamp,
-  FieldValue,
-} = require("firebase-admin/firestore");
+const { getFirestore } = require("firebase-admin/firestore");
 const { getStorage } = require("firebase-admin/storage");
 const { getAuth } = require("firebase-admin/auth");
-const key = require("./firebase.json");
+const { getDatabase } = require("firebase-admin/database");
 const admin = require("firebase-admin");
-const { getDatabase } = require("firebase-admin/database"); // Import for Realtime Database
+
+// Use environment variables from .env
+const firebaseConfig = {
+  type: process.env.FIREBASE_TYPE,
+  project_id: process.env.FIREBASE_PROJECT_ID,
+  private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"), // Ensure the private key is correctly formatted
+  client_email: process.env.FIREBASE_CLIENT_EMAIL,
+  client_id: process.env.FIREBASE_CLIENT_ID,
+  auth_uri: process.env.FIREBASE_AUTH_URI,
+  token_uri: process.env.FIREBASE_TOKEN_URI,
+  auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
+  client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
+};
 
 initializeApp({
-  credential: cert(key),
-  storageBucket: "node401app.appspot.com",
-  databaseURL: "https://node401app-default-rtdb.firebaseio.com",
+  credential: cert(firebaseConfig),
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
 });
 
 const db = getFirestore();
-db.settings({ ignoreUndefinedProperties: true });
-
 const bucket = getStorage().bucket();
 const auth = getAuth();
+const rtdb = getDatabase();
 
 const app = express();
-const port = 3020;
-const rtdb = getDatabase(); // Realtime Database
+const port = 3020; // Realtime Database
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // Add this line to parse JSON requests
