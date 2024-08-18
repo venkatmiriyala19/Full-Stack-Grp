@@ -13,7 +13,21 @@
     "nodemon": "^3.1.4",
     "request": "^2.88.2"
   },
+  "scripts": {
+    "test": "echo \" Error : No test Specfied\" && exit 1",
+    "start": "node index.js"
+  },
   "devDependencies": {
     "browser-sync": "^3.0.2"
-  }
+  },
+  "name": "full-stack-grp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "20.x"
+  },
+  "description": ""
 }
